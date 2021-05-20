@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid')
+const auth = require('../auth')
 const TABLE = 'user'
 
 module.exports = function (injectorStore) {
@@ -21,6 +22,15 @@ module.exports = function (injectorStore) {
       id: body.id ? body.id : uuidv4(),
       name: body.name,
       username: body.username,
+    }
+
+    //autentificar username y hashear password
+    if (body.password || body.username) {
+      await auth.upsert({
+        id: user.id,
+        username: user.username,
+        password: body.password,
+      })
     }
 
     return store.upsert(TABLE, user)
