@@ -1,0 +1,31 @@
+{
+  "name": "network-node",
+  "version": "1.0.0",
+  "description": "Project and practice of social media server, implementing the learning of backend, nodeJS.",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky install",
+    "prettier": "prettier . --write",
+    "lint": "eslint . --fix",
+    "fix": "npm run prettier && npm run lint"
+  },
+  "keywords": [
+    "node",
+    "javascript",
+    "backend",
+    "server",
+    "social"
+  ],
+  "author": "Diana Carolina Campuzano Garzón <dcaroli2015@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.26.0",
+    "husky": "^6.0.0",
+    "prettier": "^2.3.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "uuid": "^8.3.2"
+  }
+}
