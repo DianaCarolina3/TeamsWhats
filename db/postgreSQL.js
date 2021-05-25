@@ -64,15 +64,29 @@ const insert = (table, data) => {
     let id = data.id
     let name = data.name
     let username = data.username
-    pool.query(
-      `INSERT INTO "${table}"(
-        id, name, username) VALUES ($1, $2, $3)`,
-      [id, name, username],
-      (err, result) => {
-        if (err) return reject(err)
-        resolve(result.rows[0])
-      }
-    )
+    let password = data.password
+
+    if (data.password) {
+      pool.query(
+        `INSERT INTO "${table}"(
+          id, name, username, password) VALUES ($1, $2, $3, $4)`,
+        [id, name, username, password],
+        (err, result) => {
+          if (err) return reject(err)
+          resolve(result.rows[0])
+        }
+      )
+    } else {
+      pool.query(
+        `INSERT INTO "${table}"(
+          id, name, username) VALUES ($1, $2, $3)`,
+        [id, name, username],
+        (err, result) => {
+          if (err) return reject(err)
+          resolve(result.rows[0])
+        }
+      )
+    }
   })
 }
 
@@ -81,14 +95,27 @@ const update = (table, data) => {
     let id = data.id
     let name = data.name
     let username = data.username
-    pool.query(
-      `UPDATE "${table}" SET id=$1, name=$2, username=$3 WHERE id=$1`,
-      [id, name, username],
-      (err, result) => {
-        if (err) return reject(err)
-        resolve(result)
-      }
-    )
+    let password = data.password
+
+    if (data.password) {
+      pool.query(
+        `UPDATE "${table}" SET id=$1, name=$2, username=$3 password=$4 WHERE id=$1`,
+        [id, name, username, password],
+        (err, result) => {
+          if (err) return reject(err)
+          resolve(result)
+        }
+      )
+    } else {
+      pool.query(
+        `UPDATE "${table}" SET id=$1, name=$2, username=$3 WHERE id=$1`,
+        [id, name, username],
+        (err, result) => {
+          if (err) return reject(err)
+          resolve(result)
+        }
+      )
+    }
   })
 }
 
