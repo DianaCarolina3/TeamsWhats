@@ -10,7 +10,7 @@ router.get('/', list)
 router.get('/:id', get)
 router.post('/', upsert)
 router.put('/', upsert)
-// router.delete('/:id', remove)
+router.delete('/:id', remove)
 
 function list(req, res, next) {
   controller
@@ -39,13 +39,13 @@ function upsert(req, res, next) {
     .catch(next)
 }
 
-// function remove(req, res, next) {
-//   controller
-//     .remove(req.params.id)
-//     .then(() => {
-//       response.success(req, res, `user ${req.params.id} removed`, 200)
-//     })
-//     .catch(next)
-// }
+function remove(req, res, next) {
+  controller
+    .remove(req.params.id)
+    .then(() => {
+      response.success(req, res, `user ${req.params.id} removed`, 200)
+    })
+    .catch(next)
+}
 
 module.exports = router

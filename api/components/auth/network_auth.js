@@ -1,22 +1,21 @@
-// const express = require('express')
+const express = require('express')
 
-// const response = require('../../../res/response')
-// const controller = require('./index')
+const response = require('../../../res/response')
+const controller = require('./index')
 
-// const router = express.Router()
+const router = express.Router()
 
-// // ROUTER
-// router.post('/', login)
+// ROUTER
+router.post('/', login)
 
-// //para hacer login
-// function login(req, res, next) {
-//   controller
-//     .login(req.body.username, req.body.password)
-//     .then((token) => {
-//       response.success(req, res, token, 200)
-//     })
-//     .catch(next)
-// }
+//para hacer login
+function login(req, res, next) {
+  controller
+    .login(req.body.username, req.body.password)
+    .then((token) => {
+      response.success(req, res, token, 200)
+    })
+    .catch(next)
+}
 
-// module.exports = router
-// //
+module.exports = router
