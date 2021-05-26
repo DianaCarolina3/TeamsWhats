@@ -1,31 +1,37 @@
 const { nanoid } = require('nanoid')
-const auth = require('../auth')
+const error = require('../../../utils/error')
+const auth = require('../auth/index')
 const TABLE = 'user'
 
 module.exports = function (injectorStore) {
   let store = injectorStore
-
   if (!store) {
-    store = require('../../../db/postgreSQL')
+    store = require('../../../db/dummy')
   }
 
   const list = async () => {
-    return await store.list(TABLE)
+    let data = await store.list(TABLE)
+    return data
   }
 
   const get = async (id) => {
-    return await store.get(TABLE, id)
+    if (!id) {
+      throw error('Id invalid', 400)
+    }
+
+    let data = await store.get(TABLE, id)
+    return data
   }
 
   const upsert = async (body) => {
     let user = {
-      id: body.id ? body.id : nanoid(20),
+      id: body.id ? body.id : nanoid(body.id),
       name: body.name,
       username: body.username,
     }
 
-    // autentificar username y hashear password
-    if (body.password || body.username) {
+    //se autentifica la informacion y se almacena al agregar y editar usuario
+    if (body.username || body.password) {
       await auth.upsert({
         id: user.id,
         username: user.username,

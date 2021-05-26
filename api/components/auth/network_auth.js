@@ -1,19 +1,18 @@
 const express = require('express')
 
-const response = require('../../../res/response')
 const controller = require('./index')
+const response = require('../../../res/response')
 
 const router = express.Router()
 
 // ROUTER
-router.post('/', login)
+router.post('/login', login)
 
-//para hacer login
 function login(req, res, next) {
   controller
     .login(req.body.username, req.body.password)
-    .then((token) => {
-      response.success(req, res, token, 200)
+    .then((data) => {
+      response.success(req, res, data, 200)
     })
     .catch(next)
 }

@@ -1,40 +1,43 @@
 const bcrypt = require('bcrypt')
+const error = require('../../../utils/error')
+const AUTH = require('../../../Auth')
 const TABLE = 'auth'
 
 module.exports = function (injectorStore) {
   let store = injectorStore
-
   if (!store) {
-    store = injectorStore
+    store = require('../../../db/dummy')
   }
 
-  // login de usuario
-  // const login = async (username, password) => {
-  //   const data = await query
-  //   bcrypt.compare(password, data.password)
-  // }
+  const login = async (username, password) => {
+    const data = await store.query(TABLE, { username: username })
 
-  //hashear contraseña y verificar username y name
+    return bcrypt.compare(password, data.password).then((isSame) => {
+      if (isSame === true) {
+        return AUTH.sign(data)
+      } else {
+        throw error('Invalid password or username', 401)
+      }
+    })
+  }
+
   const upsert = async (data) => {
-    const authClient = {
+    let authData = {
       id: data.id,
     }
 
-    if (data.name) {
-      authClient.name = data.name
-    }
     if (data.username) {
-      authClient.username = data.username
+      authData.username = data.username
     }
     if (data.password) {
-      //hashea la contraseña
-      authClient.password = await bcrypt.hash(data.password, 5)
+      authData.password = await bcrypt.hash(data.password, 5)
     }
 
-    return store.upsert(TABLE, authClient)
+    return store.upsert(TABLE, authData)
   }
 
   return {
+    login,
     upsert,
   }
 }
