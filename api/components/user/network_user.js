@@ -1,5 +1,6 @@
 const express = require('express')
 
+const checkAuth = require('./secure')
 const controller = require('./index')
 const response = require('../../../res/response')
 
@@ -9,7 +10,7 @@ const router = express.Router()
 router.get('/', list)
 router.get('/:id', get)
 router.post('/', upsert)
-router.put('/', upsert)
+router.put('/', checkAuth('update'), upsert)
 router.delete('/:id', remove)
 
 function list(req, res, next) {
