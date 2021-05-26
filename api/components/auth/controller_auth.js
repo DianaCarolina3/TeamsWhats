@@ -10,7 +10,10 @@ module.exports = function (injectorStore) {
   }
 
   const login = async (username, password) => {
-    const data = await store.query(TABLE, { username: username })
+    let userQuery = {
+      username: username,
+    }
+    const data = await store.query(TABLE, userQuery)
 
     return bcrypt.compare(password, data.password).then((isSame) => {
       if (isSame === true) {
