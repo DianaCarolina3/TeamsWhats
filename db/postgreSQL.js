@@ -92,7 +92,7 @@ const update = (table, data) => {
     if (data.name) {
       if (data.password) {
         pool.query(
-          `UPDATE "${table}" SET id=$1, name=$2, username=$3 password=$4 WHERE id=$1`,
+          `UPDATE "${table}" SET id=$1, name=$2, username=$3, password=$4 WHERE id=$1`,
           [id, name, username, password],
           (err, result) => {
             if (err) return reject(err)
@@ -112,7 +112,7 @@ const update = (table, data) => {
     } else {
       if (data.password) {
         pool.query(
-          `UPDATE "${table}" SET id=$1, username=$2 password=$3 WHERE id=$1`,
+          `UPDATE "${table}" SET id=$1, username=$2, password=$3 WHERE id=$1`,
           [id, username, password],
           (err, result) => {
             if (err) return reject(err)
@@ -142,6 +142,7 @@ const upsert = async (table, data) => {
   }
 }
 
+//falta eliminacion de tabla user y auth al tiempo
 //remove item from table
 const remove = (table, id) => {
   return new Promise((resolve, reject) => {
@@ -152,6 +153,7 @@ const remove = (table, id) => {
   })
 }
 
+//login and autentification
 const query = (table, query) => {
   return new Promise((resolve, reject) => {
     let username = query.username

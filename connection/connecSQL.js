@@ -13,7 +13,7 @@ const configDB = {
 
 const pool = new Pool(configDB)
 
-// verifica y desconecta la conexión si no es válida o la conneta
+// verifica y desconecta la conexión si no es válida de lo contrario la conneta
 function handleConnection() {
   // inicio connecion
   pool.connect((err) => {

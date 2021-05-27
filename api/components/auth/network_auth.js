@@ -7,12 +7,22 @@ const router = express.Router()
 
 // ROUTER
 router.post('/login', login)
+router.delete('/:id', remove)
 
 function login(req, res, next) {
   controller
     .login(req.body.username, req.body.password)
     .then((data) => {
       response.success(req, res, data, 200)
+    })
+    .catch(next)
+}
+
+function remove(req, res, next) {
+  controller
+    .remove(req.params.id)
+    .then(() => {
+      response.success(req, res, `user ${req.params.id} removed`, 200)
     })
     .catch(next)
 }
