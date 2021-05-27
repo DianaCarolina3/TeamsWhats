@@ -1,5 +1,7 @@
 const express = require('express')
 
+const swaggerUI = require('swagger-ui-express')
+const swaggerDocument = require('../swagger.json')
 const config = require('../config/config')
 const errors = require('../res/errors')
 const router = require('../routes/router')
@@ -10,6 +12,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/net', express.static('public'))
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 router(app)
 
