@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/net', express.static('public'))
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+app.use('/net/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 router(app)
 

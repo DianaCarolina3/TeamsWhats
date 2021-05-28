@@ -43,7 +43,7 @@ module.exports = function (injectorStore) {
   }
 
   const remove = async (id) => {
-    return store.remove(TABLE, id)
+    return store.removeOneUser(id)
   }
 
   return {

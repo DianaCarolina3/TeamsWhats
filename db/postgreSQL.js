@@ -142,8 +142,34 @@ const upsert = async (table, data) => {
   }
 }
 
-//falta eliminacion de tabla user y auth al tiempo
-//remove item from table
+//remove user in auth table
+const removeInAuth = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM "auth" WHERE id=$1`, [id], (err, result) => {
+      if (err) return reject(err)
+      resolve(result.rows)
+    })
+  })
+}
+
+//remove user in table user
+const removeInUser = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM "user" WHERE id=$1`, [id], (err, result) => {
+      if (err) return reject(err)
+      resolve(result.rows)
+    })
+  })
+}
+
+const removeOneUser = (id) => {
+  if (id) {
+    removeInAuth(id)
+    removeInUser(id)
+  }
+}
+
+// remove item from table
 const remove = (table, id) => {
   return new Promise((resolve, reject) => {
     pool.query(`DELETE FROM "${table}" WHERE id=$1`, [id], (err, result) => {
@@ -174,5 +200,6 @@ module.exports = {
   get,
   upsert,
   remove,
+  removeOneUser,
   query,
 }
