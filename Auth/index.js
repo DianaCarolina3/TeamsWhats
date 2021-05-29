@@ -40,6 +40,9 @@ const check = {
     }
     return decoded
   },
+  proper: function (req) {
+    decodedHeader(req)
+  },
 }
 
 //decodificacion y comprobacion de la inforamcion extraida del header

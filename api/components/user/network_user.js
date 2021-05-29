@@ -11,7 +11,7 @@ router.get('/', list)
 router.get('/:id', get)
 router.post('/', upsert)
 router.put('/', checkAuth('update'), upsert)
-router.delete('/:id', remove)
+router.delete('/:id', checkAuth('remove'), remove)
 
 function list(req, res, next) {
   controller
@@ -35,7 +35,7 @@ function upsert(req, res, next) {
   controller
     .upsert(req.body)
     .then((data) => {
-      response.success(req, res, data, 200)
+      response.success(req, res, data, 201)
     })
     .catch(next)
 }

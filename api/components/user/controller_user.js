@@ -1,7 +1,7 @@
 const { nanoid } = require('nanoid')
 const error = require('../../../utils/error')
 const auth = require('../auth/index')
-const TABLE = 'user'
+const TABLE = 'users'
 
 module.exports = function (injectorStore) {
   let store = injectorStore
