@@ -26,8 +26,8 @@ module.exports = function (injectorStore) {
     return await store.insertFollow(TABLE, data).then(() => data)
   }
 
-  const Unfollowed = async (user_to_id) => {
-    return await store.Unfollowed(user_to_id)
+  const Unfollowed = async (user_from, user_to_id) => {
+    return await store.Unfollowed(user_from, user_to_id)
   }
 
   return {

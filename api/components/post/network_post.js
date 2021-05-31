@@ -6,12 +6,12 @@ const response = require('../../../res/response')
 
 const router = express.Router()
 
-//ROUTER
+// ROUTER
 router.get('/', list)
-router.get('/following/:id', getFollowing)
-router.get('/followers/:id', getFollowers)
-router.post('/:id', checkAuth('follow'), follow)
-router.delete('/unfollowed/:user_to_id', checkAuth('unfollowed'), Unfollowed)
+router.get('/:id', get)
+router.post('/', checkAuth('post'), addPost)
+router.put('/', checkAuth('update'), updatePost)
+router.delete('/:id', checkAuth('delete'), deletePost)
 
 function list(req, res, next) {
   controller
@@ -22,39 +22,38 @@ function list(req, res, next) {
     .catch(next)
 }
 
-function getFollowing(req, res, next) {
+function get(req, res, next) {
   controller
-    .getFollowing(req.params.id)
+    .get(req.params.id)
     .then((data) => {
       response.success(req, res, data, 200)
     })
     .catch(next)
 }
 
-function getFollowers(req, res, next) {
+function addPost(req, res, next) {
   controller
-    .getFollowers(req.params.id)
-    .then((data) => {
-      response.success(req, res, data, 200)
-    })
-    .catch(next)
-}
-
-function follow(req, res, next) {
-  controller
-    .follow(req.user.id, req.params.id)
+    .addPost(req.user, req.body)
     .then((data) => {
       response.success(req, res, data, 201)
     })
     .catch(next)
 }
 
-//elimina todos los id [ERROR]
-function Unfollowed(req, res, next) {
+function updatePost(req, res, next) {
   controller
-    .Unfollowed(req.user.id, req.params.user_to_id)
+    .updatePost(req.body)
+    .then((data) => {
+      response.success(req, res, data, 201)
+    })
+    .catch(next)
+}
+
+function deletePost(req, res, next) {
+  controller
+    .deletePost(req.params.id)
     .then(() => {
-      response.success(req, res, `Unfollowed to ${req.params.user_to_id}`, 200)
+      response.success(req, res, `post ${req.params.id} removed`, 200)
     })
     .catch(next)
 }
