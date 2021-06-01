@@ -1,7 +1,7 @@
 {
-  "name": "network-node",
+  "name": "TeamsWhats",
   "version": "1.0.0",
-  "description": "Project and practice of social media server, implementing the learning of backend, nodeJS.",
+  "description": "This is a project where I made a simple social network called TeamsWhats. Project and practice of social media server, implementing the learning of backend and nodeJS.",
   "main": "index.js",
   "scripts": {
     "prepare": "husky install",

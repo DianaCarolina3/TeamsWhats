@@ -49,7 +49,6 @@ function follow(req, res, next) {
     .catch(next)
 }
 
-//elimina todos los id [ERROR]
 function Unfollowed(req, res, next) {
   controller
     .Unfollowed(req.user.id, req.params.user_to_id)
