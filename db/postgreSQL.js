@@ -4,6 +4,7 @@ const pool = require('../connection/connetSQL')
 const user_auth = require('./SQL/user-auth_sql')
 const follow = require('./SQL/user_follow_sql')
 const post = require('./SQL/post_sql')
+const post_like = require('./SQL/post_like_sql')
 
 //USER AND AUTH
 async function upsert(table, data) {
@@ -40,6 +41,19 @@ async function updatePost(table, data) {
   return await post.updatePost(table, data)
 }
 
+//POST_LIKE
+async function like(table, data) {
+  return await post_like.like(table, data)
+}
+
+async function getPost(id) {
+  return await post_like.getPost(id)
+}
+
+async function removePost(table, id) {
+  return await post_like.removePost(table, id)
+}
+
 //FUNCTIONS ALL REQUIRED
 
 // //all list table
@@ -47,6 +61,7 @@ const list = (table) => {
   return new Promise((resolve, reject) => {
     pool.query(`SELECT * FROM "${table}"`, (err, result) => {
       if (err) return reject(err)
+
       resolve(result.rows)
     })
   })
@@ -105,4 +120,7 @@ module.exports = {
   query,
   addPost,
   updatePost,
+  like,
+  getPost,
+  removePost,
 }
