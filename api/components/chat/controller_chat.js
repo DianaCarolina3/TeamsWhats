@@ -11,8 +11,8 @@ module.exports = function (injectorStore) {
     return await store.list(TABLE)
   }
 
-  const getParams = async (id) => {
-    return await store.getParams(TABLE, id)
+  const conversations = async (id) => {
+    return await store.conversations(id)
   }
 
   const addChat = async (users_from, users_to) => {
@@ -32,7 +32,7 @@ module.exports = function (injectorStore) {
   return {
     addChat,
     list,
-    getParams,
     deleteChat,
+    conversations,
   }
 }

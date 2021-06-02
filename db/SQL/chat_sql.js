@@ -1,13 +1,40 @@
 const pool = require('../../connection/connetSQL')
 
-const getParams = (table, id) => {
+const conversations = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT * FROM "${table}" WHERE id=$1 OR users_from=$1 OR users_to=$1`,
+      `SELECT * FROM chat, message WHERE chat = $1`,
       [id],
       (err, result) => {
         if (err) return reject(err)
-        resolve(result.rows)
+        resolve(
+          result.rows.map(
+            ({
+              users_from,
+              users_to,
+              id,
+              id_message,
+              chat,
+              date,
+              username,
+              message,
+              file,
+            }) => {
+              let data = {
+                users_from: users_from,
+                users_to: users_to,
+                id: id,
+                id_message: id_message,
+                chat: chat,
+                date: date,
+                username: username,
+                message: message,
+                file: file,
+              }
+              return data
+            }
+          )
+        )
       }
     )
   })
@@ -32,5 +59,5 @@ const addChat = (table, data) => {
 
 module.exports = {
   addChat,
-  getParams,
+  conversations,
 }

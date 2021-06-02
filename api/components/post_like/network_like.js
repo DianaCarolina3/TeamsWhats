@@ -7,10 +7,10 @@ const response = require('../../../res/response')
 const router = express.Router()
 
 //ROUTER
-router.get('/like', list) //f.list
-router.get('/like/:userID', getPost)
-router.post('/like', checkAuth('like'), like)
-router.delete('/like/:idPost', checkAuth('delete'), remove)
+router.get('/', list)
+router.get('/:userID', getPost)
+router.post('/', checkAuth('like'), like)
+router.delete('/:idPost', checkAuth('delete'), remove)
 
 function list(req, res, next) {
   controller
