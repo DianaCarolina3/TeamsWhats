@@ -3,12 +3,14 @@ const auth = require('../api/components/auth/network_auth')
 const user_follow = require('../api/components/user_follow/network_follow')
 const post = require('../api/components/post/network_post')
 const post_like = require('../api/components/post_like/network_like')
+const chat = require('../api/components/chat/network_chat')
 
 const router = (server) => {
   server.use('/net/users', user)
   server.use('/net/auth', auth)
   server.use('/net/follow', user_follow)
   server.use('/net/post', post, post_like)
+  server.use('/net/chat', chat)
 }
 
 module.exports = router

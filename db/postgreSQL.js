@@ -5,6 +5,7 @@ const user_auth = require('./SQL/user-auth_sql')
 const follow = require('./SQL/user_follow_sql')
 const post = require('./SQL/post_sql')
 const post_like = require('./SQL/post_like_sql')
+const chat = require('./SQL/chat_sql')
 
 //USER AND AUTH
 async function upsert(table, data) {
@@ -52,6 +53,15 @@ async function getPost(id) {
 
 async function removePost(table, id) {
   return await post_like.removePost(table, id)
+}
+
+//CHAT
+async function addChat(table, data) {
+  return await chat.addChat(table, data)
+}
+
+async function getParams(table, id) {
+  return await chat.getParams(table, id)
 }
 
 //FUNCTIONS ALL REQUIRED
@@ -123,4 +133,6 @@ module.exports = {
   like,
   getPost,
   removePost,
+  addChat,
+  getParams,
 }
