@@ -11,15 +11,19 @@ module.exports = function (injectorStore) {
     return await store.list(TABLE)
   }
 
-  const conversations = async (id) => {
-    return await store.conversations(id)
+  const conversations = async () => {
+    return await store.conversations()
   }
 
-  const addChat = async (users_from, users_to) => {
+  const oneConversations = async (id) => {
+    return await store.oneConversations(id)
+  }
+
+  const addChat = async (users_one, users_two) => {
     let data = {
       id: nanoid(),
-      users_from: users_from.id,
-      users_to: users_to,
+      users_one: users_one.id,
+      users_two: users_two,
     }
 
     return await store.addChat(TABLE, data).then(() => data)
@@ -34,5 +38,6 @@ module.exports = function (injectorStore) {
     list,
     deleteChat,
     conversations,
+    oneConversations,
   }
 }

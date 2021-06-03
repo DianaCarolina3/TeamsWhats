@@ -21,7 +21,7 @@ module.exports = function (injectorStore) {
       chat: idChat,
       date: new Date(),
       username: user.id,
-      user: user.username,
+      user_name: user.username,
       message: body.message,
       file: body.file,
     }
@@ -35,7 +35,7 @@ module.exports = function (injectorStore) {
       chat: body.chat,
       date: new Date(),
       username: user.id,
-      user: user.username,
+      user_name: user.username,
       message: body.message,
       file: body.file,
     }

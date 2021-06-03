@@ -8,13 +8,23 @@ const router = express.Router()
 
 // ROUTER
 router.get('/', list)
-router.get('/:idChat', conversations)
+router.get('/conversations', conversations)
+router.get('/conversations/:id', oneConversations)
 router.post('/:idTo', checkAuth('chat'), addChat)
 router.delete('/delete/:idChat', checkAuth('chat'), deleteChat)
 
+function oneConversations(req, res, next) {
+  controller
+    .oneConversations(req.params.id)
+    .then((data) => {
+      response.success(req, res, data, 200)
+    })
+    .catch(next)
+}
+
 function conversations(req, res, next) {
   controller
-    .conversations(req.params.idChat)
+    .conversations()
     .then((data) => {
       response.success(req, res, data, 200)
     })

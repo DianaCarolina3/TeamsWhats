@@ -61,8 +61,12 @@ async function addChat(table, data) {
   return await chat.addChat(table, data)
 }
 
-async function conversations(id) {
-  return await chat.conversations(id)
+async function conversations() {
+  return await chat.conversations()
+}
+
+async function oneConversations(id) {
+  return await chat.oneConversations(id)
 }
 
 //MESSAGE
@@ -156,4 +160,5 @@ module.exports = {
   deleteMessage,
   getMessage,
   conversations,
+  oneConversations,
 }
