@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a project where I made a simple social network called TeamsWhats. Project and practice of social media server, implementing the learning of backend and nodeJS. [http://localhost:4000/net](http://localhost:4000/net).  For create user, you can use the api key `users` and in teh body `name, username, password`.",
+    "description": "This is a project where I made a simple social network called TeamsWhats. Project and practice of social media server, implementing the learning of backend and nodeJS. [http://localhost:4000/net](http://localhost:4000/net).  For create user, you can use the api key `users` and in the body `name, username, password`.",
     "version": "1.0.0",
     "title": "TeamsWhats",
     "termsOfService": "http://swagger.io/terms/",
@@ -21,49 +21,44 @@
       "post": {
         "tags": ["users"],
         "summary": "Create user",
-        "description": "This can only be done by the logged in user.",
+        "description": "This can only create a user.",
         "operationId": "createUser",
         "produces": ["application/json"],
         "parameters": [
           {
-            "username": "body",
             "name": "body",
-            "password": "body"
+            "username": "body",
+            "password": "body",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "201": {
+            "description": "Ok"
           }
         }
       },
       "put": {
         "tags": ["users"],
         "summary": "Updated user",
-        "description": "This can only be done by the logged in user.",
+        "description": "This can only update a user.",
         "operationId": "updateUser",
-        "produces": ["application/xml", "application/json"],
+        "produces": ["application/json"],
         "parameters": [
           {
-            "name": "username",
-            "in": "path",
-            "description": "name that need to be updated",
+            "id": "body",
+            "name": "body",
+            "username": "body",
+            "password": "body",
+            "bearer token": "auth",
             "required": true,
             "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Updated user object",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
           }
         ],
         "responses": {
-          "400": {
-            "description": "Invalid user supplied"
+          "401": {
+            "description": "Invalid token"
           },
           "404": {
             "description": "User not found"
@@ -107,24 +102,489 @@
       "delete": {
         "tags": ["users"],
         "summary": "Delete user",
-        "description": "This can only be done by the logged in user.",
+        "description": "This can only delete a user.",
         "operationId": "deleteUser",
-        "produces": ["application/xml", "application/json"],
+        "produces": ["application/json"],
+        "parameters": ["idUser"],
+        "responses": {
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/follow/{id}": {
+      "post": {
+        "tags": ["user_follow"],
+        "summary": "Create a follow",
+        "description": "This can only create a follow.",
+        "operationId": "createFollow",
+        "produces": ["application/json"],
         "parameters": [
           {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be deleted",
+            "id user": "id",
+            "Bearer token": "auth"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["user_follow"],
+        "summary": "Delete a follow",
+        "description": "This can only delete a follow.",
+        "operationId": "deleteFollow",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id user": "id",
+            "Bearer token": "auth"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/follow/": {
+      "get": {
+        "tags": ["user_follow"],
+        "summary": "Get all follow_user",
+        "description": "Get all follow_user",
+        "operationId": "getFollow",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/follow/following/{id}": {
+      "get": {
+        "tags": ["user_follow"],
+        "summary": "Get a following",
+        "description": "This can only get following.",
+        "operationId": "getFollow",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id user": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/follow/followers/{id}": {
+      "get": {
+        "tags": ["user_follow"],
+        "summary": "Get a followers",
+        "description": "This can only get followers.",
+        "operationId": "getFollow",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id user": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "login user",
+        "description": "This can only login user.",
+        "operationId": "postAuth",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "username": "body",
+            "password": "body"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/post": {
+      "post": {
+        "tags": ["post"],
+        "summary": "Create post of user",
+        "description": "This can only create post of user.",
+        "operationId": "postPost",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "username": "body",
+            "text": "body",
+            "image": "body",
+            "Bearer token": "auth",
             "required": true,
             "type": "string"
           }
         ],
         "responses": {
-          "400": {
-            "description": "Invalid username supplied"
+          "201": {
+            "description": "created"
+          }
+        }
+      },
+      "get": {
+        "tags": ["post"],
+        "summary": "Get all post of user",
+        "description": "This can only get all post of user.",
+        "operationId": "getPost",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      },
+      "put": {
+        "tags": ["post"],
+        "summary": "Updated post",
+        "description": "This can only update a post.",
+        "operationId": "putPost",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id": "body",
+            "username": "body",
+            "text": "body",
+            "image": "body",
+            "bearer token": "auth",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Invalid token"
           },
           "404": {
-            "description": "User not found"
+            "description": "Post not found"
+          }
+        }
+      }
+    },
+    "/post/{id}": {
+      "get": {
+        "tags": ["post"],
+        "summary": "Get a post of user",
+        "description": "This can only get a post of user.",
+        "operationId": "getPost",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id": "body",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["post"],
+        "summary": "Delete a post of user",
+        "description": "This can only delete a post of user.",
+        "operationId": "deletePost",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id": "body",
+            "Bearer token": "auth",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/like/{id}": {
+      "get": {
+        "tags": ["post_like"],
+        "summary": "Get a like of post",
+        "description": "This can only get a like of post.",
+        "operationId": "getLike",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id": "body",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["post_like"],
+        "summary": "Delete a like of post",
+        "description": "This can only delete a like of post.",
+        "operationId": "deleteLike",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id": "body",
+            "Bearer token": "auth",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/like": {
+      "get": {
+        "tags": ["post_like"],
+        "summary": "Get all like of post",
+        "description": "This can only get all like of post.",
+        "operationId": "getLike",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      },
+      "post": {
+        "tags": ["post_like"],
+        "summary": "Delete a like of post",
+        "description": "This can only delete a like of post.",
+        "operationId": "deleteLike",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "like_from_post": "body",
+            "like_to_post": "body",
+            "Bearer token": "auth",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/chat/{id}": {
+      "post": {
+        "tags": ["chat"],
+        "summary": "Add a chat for id",
+        "description": "This can only add a chat.",
+        "operationId": "postChat",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id": "body",
+            "Bearer token": "auth",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["chat"],
+        "summary": "Delete a chat",
+        "description": "This can only delete a chat.",
+        "operationId": "deleteChat",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id": "body",
+            "Bearer token": "auth",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/chat": {
+      "get": {
+        "tags": ["chat"],
+        "summary": "Get all chat",
+        "description": "This can only get all chat.",
+        "operationId": "getChat",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/chat/conversations": {
+      "get": {
+        "tags": ["chat"],
+        "summary": "Get all chat",
+        "description": "This can only get all chat.",
+        "operationId": "getChat",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/chat/conversations/{id}": {
+      "get": {
+        "tags": ["chat"],
+        "summary": "Get a chat for id",
+        "description": "This can only get a chat for id.",
+        "operationId": "getChat",
+        "produces": ["application/json"],
+        "parameters": ["idChat"],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/message/{id}": {
+      "post": {
+        "tags": ["message"],
+        "summary": "Add a message",
+        "description": "This can only add a message.",
+        "operationId": "postMessage",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "username": "body",
+            "message": "body",
+            "file": "body",
+            "id": "body",
+            "Bearer token": "auth",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          }
+        }
+      },
+      "put": {
+        "tags": ["message"],
+        "summary": "Update a message",
+        "description": "This can only update a message.",
+        "operationId": "putMessage",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "chat": "body",
+            "username": "body",
+            "message": "body",
+            "file": "body",
+            "id": "body",
+            "Bearer token": "auth",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          }
+        }
+      },
+      "get": {
+        "tags": ["message"],
+        "summary": "Get a message",
+        "description": "This can only get a message.",
+        "operationId": "getMessage",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id": "body",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["message"],
+        "summary": "Delete a message",
+        "description": "This can only delete a message.",
+        "operationId": "deleteMessage",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "id": "body",
+            "Bearer token": "auth",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/message": {
+      "get": {
+        "tags": ["message"],
+        "summary": "Get all message",
+        "description": "This can only get all message.",
+        "operationId": "getMessage",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok"
           }
         }
       }
@@ -151,33 +611,25 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "integer",
+          "type": "string",
           "format": "int64"
         },
-        "petId": {
-          "type": "integer",
+        "name": {
+          "type": "string",
           "format": "int64"
         },
-        "quantity": {
-          "type": "integer",
+        "username": {
+          "type": "string",
           "format": "int32"
         },
-        "shipDate": {
+        "password": {
+          "type": "string",
+          "default": "string"
+        },
+        "date": {
           "type": "string",
           "format": "date-time"
-        },
-        "status": {
-          "type": "string",
-          "description": "Order Status",
-          "enum": ["placed", "approved", "delivered"]
-        },
-        "complete": {
-          "type": "boolean",
-          "default": false
         }
-      },
-      "xml": {
-        "name": "Order"
       }
     },
     "Category": {
@@ -205,19 +657,7 @@
         "username": {
           "type": "string"
         },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
         "password": {
-          "type": "string"
-        },
-        "phone": {
           "type": "string"
         },
         "userStatus": {
@@ -240,9 +680,6 @@
         "name": {
           "type": "string"
         }
-      },
-      "xml": {
-        "name": "Tag"
       }
     },
     "ApiResponse": {
@@ -260,9 +697,5 @@
         }
       }
     }
-  },
-  "externalDocs": {
-    "description": "Find out more about Swagger",
-    "url": "http://swagger.io"
   }
 }

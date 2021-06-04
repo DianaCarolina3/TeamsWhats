@@ -1,4 +1,4 @@
-//servicio de mySQL conectado en microservicio
+//servicio de mySQL conectado en microservicio, base de datos como una sola api http
 const express = require('express')
 
 const config = require('../config/config')
