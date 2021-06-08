@@ -4,6 +4,9 @@
   "description": "This is a project where I made a simple social network called TeamsWhats. Project and practice of social media server, implementing the learning of backend and nodeJS.",
   "main": "index.js",
   "scripts": {
+    "start": "pm2 start api && pm2 start cache && pm2 start mysql",
+    "stop": "pm2 stop api && pm2 stop cache && pm2 stop mysql",
+    "delete": "pm2 delete api && pm2 delete cache && pm2 delete mysql",
     "prepare": "husky install",
     "prettier": "prettier . --write",
     "lint": "eslint . --fix",
