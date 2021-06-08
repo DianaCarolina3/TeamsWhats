@@ -1,21 +1,47 @@
 const TABLE = 'user_follow'
 
-module.exports = function (injectorStore) {
+module.exports = function (injectorStore, injectorCache) {
   let store = injectorStore
+  let cache = injectorCache
+
   if (!store) {
-    store = require('../../../db/postgreSQL')
+    store = require('../../../db/testing/alternatedb')
+  }
+  if (!store) {
+    cache = require('../../../db/testing/alternatedb')
   }
 
   const list = async () => {
-    return await store.list(TABLE)
+    let data = await cache.list(TABLE)
+
+    if (!data) {
+      data = await store.list(TABLE)
+      cache.upsert(TABLE, data)
+    }
+
+    return data
   }
 
   const getFollowing = async (id) => {
-    return await store.getFollowing(id)
+    let data = await cache.get(TABLE, id)
+
+    if (!data) {
+      data = await store.getFollowing(id)
+      cache.upsert(TABLE, data)
+    }
+
+    return data
   }
 
   const getFollowers = async (id) => {
-    return await store.getFollowers(id)
+    let data = await cache.get(TABLE, id)
+
+    if (!data) {
+      data = await store.getFollowers(id)
+      cache.upsert(TABLE, data)
+    }
+
+    return data
   }
 
   const follow = async (from, to) => {

@@ -3,14 +3,25 @@ const error = require('../../../utils/error')
 const auth = require('../auth/index')
 const TABLE = 'users'
 
-module.exports = function (injectorStore) {
+module.exports = function (injectorStore, injectorCache) {
   let store = injectorStore
+  let cache = injectorCache
+
   if (!store) {
-    store = require('../../../db/dummy')
+    store = require('../../../db/testing/alternatedb')
+  }
+  if (!cache) {
+    cache = require('../../../db/testing/alternatedb')
   }
 
   const list = async () => {
-    let data = await store.list(TABLE)
+    let data = await cache.list(TABLE)
+
+    if (!data) {
+      data = await store.list(TABLE)
+      cache.upsert(TABLE, data)
+    }
+
     return data
   }
 
@@ -19,7 +30,16 @@ module.exports = function (injectorStore) {
       throw error('Id invalid', 400)
     }
 
-    let data = await store.get(TABLE, id)
+    let data = await cache.get(TABLE, id)
+
+    if (!data) {
+      data = await store.get(TABLE, id)
+      cache.upsert(TABLE, data)
+      console.log('db')
+    } else {
+      console.log('cache')
+    }
+
     return data
   }
 

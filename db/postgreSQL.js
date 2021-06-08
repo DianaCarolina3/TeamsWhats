@@ -139,26 +139,32 @@ const query = (table, query) => {
 }
 
 module.exports = {
+  //user - auth - other
   list,
   get,
+  remove,
+  upsert,
+  query,
+  removeOneUser,
+  //follow
   getFollowing,
   getFollowers,
-  upsert,
-  insertFollow,
-  removeOneUser,
   Unfollowed,
-  remove,
-  query,
+  insertFollow,
+  //post
   addPost,
   updatePost,
-  like,
   getPost,
   removePost,
+  //chat
   addChat,
+  conversations,
+  oneConversations,
+  //message
   addMessage,
   updateMessage,
   deleteMessage,
   getMessage,
-  conversations,
-  oneConversations,
+  //post_like
+  like,
 }

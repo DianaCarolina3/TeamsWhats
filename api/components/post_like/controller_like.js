@@ -1,13 +1,25 @@
 const TABLE = 'post_like'
 const error = require('../../../utils/error')
 
-module.exports = function (injectorStore) {
+module.exports = function (injectorStore, injectorCache) {
   let store = injectorStore
+  let cache = injectorCache
+
   if (!store) {
-    store = require('../../../db/postgreSQL')
+    store = require('../../../db/testing/alternatedb')
   }
+  if (!cache) {
+    cache = require('../../../db/testing/alternatedb')
+  }
+
   const list = async () => {
-    let data = await store.list(TABLE)
+    let data = await cache.list(TABLE)
+
+    if (!data) {
+      data = await store.list(TABLE)
+      cache.upsert(TABLE, data)
+    }
+
     return data
   }
 
@@ -16,7 +28,14 @@ module.exports = function (injectorStore) {
       throw error('Invalid id', 404)
     }
 
-    return await store.getPost(id)
+    let data = await cache.get(TABLE, id)
+
+    if (!data) {
+      data = await store.getPost(id)
+      cache.upsert(TABLE, data)
+    }
+
+    return data
   }
 
   const like = async (user, body) => {

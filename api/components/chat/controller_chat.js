@@ -1,22 +1,48 @@
 const TABLE = 'chat'
 const { nanoid } = require('nanoid')
 
-module.exports = function (injectorStore) {
+module.exports = function (injectorStore, injectorCache) {
   let store = injectorStore
+  let cache = injectorCache
+
   if (!store) {
-    store = require('../../../db/postgreSQL')
+    store = require('../../../db/testing/alternatedb')
+  }
+  if (!cache) {
+    cache = require('../../../db/testing/alternatedb')
   }
 
   const list = async () => {
-    return await store.list(TABLE)
+    let data = await cache.list(TABLE)
+
+    if (!data) {
+      data = await store.list(TABLE)
+      cache.upsert(TABLE, data)
+    }
+
+    return data
   }
 
   const conversations = async () => {
-    return await store.conversations()
+    let data = await cache.list(TABLE)
+
+    if (!data) {
+      data = await store.conversations(TABLE)
+      cache.upsert(TABLE, data)
+    }
+
+    return data
   }
 
   const oneConversations = async (id) => {
-    return await store.oneConversations(id)
+    let data = await cache.get(TABLE, id)
+
+    if (!data) {
+      data = await store.oneConversations(TABLE, id)
+      cache.upsert(TABLE, data)
+    }
+
+    return data
   }
 
   const addChat = async (users_one, users_two) => {

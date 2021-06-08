@@ -5,7 +5,7 @@ require('dotenv').config({ path: '.env' })
 
 const configDB = {
   user: process.env.PGUSER,
-  host: config.db.pghost,
+  host: config.postgresql.pghost,
   port: process.env.PGPORT,
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,

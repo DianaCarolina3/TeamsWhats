@@ -1,5 +1,6 @@
 module.exports = {
-  db: {
+  remoteDB: process.env.REMOTE_DB || false,
+  postgresql: {
     pghost: process.env.PGHOST || 'localhost',
   },
   api: {
@@ -9,5 +10,9 @@ module.exports = {
   mysql: {
     port: process.env.MYSQL_PORT || 4001,
     host: process.env.MYSQL_HOST || 'localhost',
+  },
+  cache: {
+    port: process.env.CACHE_PORT || 4002,
+    host: process.env.CACHE_HOST || 'localhost',
   },
 }
