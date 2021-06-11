@@ -13,9 +13,9 @@ router.get('/conversations/:id', oneConversations)
 router.post('/:idTo', checkAuth('chat'), addChat)
 router.delete('/delete/:idChat', checkAuth('chat'), deleteChat)
 
-function oneConversations(req, res, next) {
+function list(req, res, next) {
   controller
-    .oneConversations(req.params.id)
+    .list()
     .then((data) => {
       response.success(req, res, data, 200)
     })
@@ -31,9 +31,9 @@ function conversations(req, res, next) {
     .catch(next)
 }
 
-function list(req, res, next) {
+function oneConversations(req, res, next) {
   controller
-    .list()
+    .oneConversations(req.params.id)
     .then((data) => {
       response.success(req, res, data, 200)
     })

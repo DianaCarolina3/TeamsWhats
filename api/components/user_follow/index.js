@@ -4,7 +4,7 @@ let cache
 const config = require('../../../config/config')
 const controller = require('./controller_follow')
 
-if (!config.remoteDB === true) {
+if (config.remoteDB === true) {
   store = require('../../../db/remoteDB/remote_mysql')
   cache = require('../../../db/remoteDB/remote_cache')
 } else {

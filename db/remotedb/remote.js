@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 const request = require('request')
-const { list } = require('../../api/components/user')
 
 module.exports = class createRemoteDB {
   constructor(host, port) {

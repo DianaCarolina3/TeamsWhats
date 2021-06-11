@@ -7,7 +7,7 @@ module.exports = function (injectorStore, injectorCache) {
   if (!store) {
     store = require('../../../db/testing/alternatedb')
   }
-  if (!store) {
+  if (!cache) {
     cache = require('../../../db/testing/alternatedb')
   }
 
