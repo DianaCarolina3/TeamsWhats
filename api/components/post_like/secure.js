@@ -5,7 +5,7 @@ module.exports = function checkAuth(action) {
   function middleware(req, res, next) {
     switch (action) {
       case 'like':
-        const owner = req.body.like_from_post
+        const owner = req.body.like_from
         AUTH.check.own(req, owner)
         next()
         break

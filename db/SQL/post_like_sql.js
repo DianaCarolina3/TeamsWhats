@@ -3,7 +3,7 @@ const pool = require('../../connection/connetSQL')
 const getPost = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT * FROM "post_like" WHERE like_from_post = $1 OR like_to_post = $1`,
+      `SELECT * FROM "post_like" WHERE like_from = $1 OR like_to_post = $1`,
       [id],
       (err, result) => {
         if (err) return reject(err)
@@ -15,10 +15,10 @@ const getPost = (id) => {
 
 const like = (table, data) => {
   return new Promise((resolve, reject) => {
-    let from = data.like_from_post
+    let from = data.like_from
     let to = data.like_to_post
     pool.query(
-      `INSERT INTO "${table}" (like_from_post, like_to_post) VALUES ($1, $2)`,
+      `INSERT INTO "${table}" (like_from, like_to_post) VALUES ($1, $2)`,
       [from, to],
       (err, result) => {
         if (err) return reject(err)

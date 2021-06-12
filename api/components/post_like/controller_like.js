@@ -40,7 +40,7 @@ module.exports = function (injectorStore, injectorCache) {
 
   const like = async (user, body) => {
     let data = {
-      like_from_post: user.id,
+      like_from: user.id,
       username: user.username,
       like_to_post: body.like_to_post,
     }
