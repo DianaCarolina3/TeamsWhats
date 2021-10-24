@@ -10,7 +10,7 @@ const sign = (dataAuth) => {
 
 //verifica token
 function verify(token) {
-  return jwt.verify(token, process.env.SECRET)
+  return jwt.verify(token, process.env.SECRET, { exp: '1h' })
 }
 
 //token
