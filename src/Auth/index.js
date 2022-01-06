@@ -1,15 +1,16 @@
 const jwt = require('jsonwebtoken')
 const error = require('../utils/error')
+const config = require('../config')
 
 //genera token al iniciar seccion
 const sign = (dataAuth) => {
   const data = JSON.parse(JSON.stringify(dataAuth))
-  return jwt.sign(data, process.env.SECRET)
+  return jwt.sign(data, config.auth_jwt.secret)
 }
 
 //verifica token
 function verify(token) {
-  return jwt.verify(token, process.env.SECRET, { exp: '1h' })
+  return jwt.verify(token, config.auth_jwt.secret, { exp: '1h' })
 }
 
 //token

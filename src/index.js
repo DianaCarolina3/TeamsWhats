@@ -7,14 +7,17 @@ const config = require('./config')
 const router = require('./routes/router')
 const path = require('path')
 
-// //Server
+// Server
 const app = express()
 
 //Middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+//Static File
 app.use('/TeamsWhats', express.static(path.join(__dirname, 'public')))
+
+//Documentation
 app.use(
   '/TeamsWhats/api-docs',
   swaggerUI.serve,

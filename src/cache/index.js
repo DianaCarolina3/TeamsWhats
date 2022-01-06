@@ -2,6 +2,7 @@
 const express = require('express')
 
 const router = require('./network')
+const config = require('../config')
 
 const app = express()
 
@@ -11,8 +12,6 @@ app.use(express.urlencoded({ extended: true }))
 //ROUTER
 app.use('/', router)
 
-require('dotenv').config({ path: '.env' })
-
-app.listen(process.env.CACHE_PORT, () => {
-  console.log(`Service of cache listen on the port: ${process.env.CACHE_PORT}`)
+app.listen(config.cache.port, () => {
+  console.log(`Service of cache listen on the port: ${config.cache.port}`)
 })

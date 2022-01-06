@@ -3,11 +3,11 @@ const { Pool } = require('pg')
 const config = require('../config')
 
 const configDB = {
-  user: process.env.PG_USER,
+  user: config.postgresql.pguser,
   host: config.postgresql.pghost,
-  port: process.env.PG_PORT,
-  password: process.env.PG_PASSWORD,
-  database: process.env.PG_DATABASE,
+  port: config.postgresql.pgport,
+  password: config.postgresql.pgpass,
+  database: config.postgresql.pgdatabase,
 }
 
 const pool = new Pool(configDB)

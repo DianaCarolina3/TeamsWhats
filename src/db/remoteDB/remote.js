@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const request = require('request')
 
 module.exports = class createRemoteDB {

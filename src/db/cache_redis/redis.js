@@ -1,9 +1,10 @@
 const redis = require('redis')
+const config = require('../../config')
 
 const client = redis.createClient({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-  password: process.env.REDIS_PASSWORD,
+  host: config.cache_redis.redishost,
+  port: config.cache_redis.redisport,
+  password: config.cache_redis.redispass,
 })
 
 async function list(table) {
