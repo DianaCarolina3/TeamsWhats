@@ -34,7 +34,9 @@ module.exports = function (injectorStore) {
       authData.username = data.username
     }
     if (data.password) {
-      authData.password = await bcrypt.hash(data.password, 5)
+      const saltRounds = 10
+      const salt = await bcrypt.genSalt(saltRounds)
+      authData.password = await bcrypt.hash(data.password, salt)
     }
 
     return store.upsert(TABLE, authData)
