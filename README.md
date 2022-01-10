@@ -15,6 +15,7 @@ El proyecto posee base de datos remota y cache Redis.
 - Redis cache
 - JsonWedTokens
 - Swagger documentation
+- Arquitectura backend
 
 ### License
 
