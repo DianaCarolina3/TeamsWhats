@@ -1,7 +1,7 @@
 {
   "name": "TeamsWhats",
   "version": "1.0.0",
-  "description": "This is a project where I made a simple social network called TeamsWhats. Project and practice of social media server, implementing the learning of backend and nodeJS.",
+  "description": "This is a project where I made a social network called TeamsWhats. Project of social media server, implementing the learning of backend and nodeJS.",
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/index.js",
@@ -19,7 +19,13 @@
     "javascript",
     "backend",
     "server",
-    "social"
+    "social",
+    "postgreSQL",
+    "express",
+    "node",
+    "redis",
+    "swagger",
+    "jsonwebtokens"
   ],
   "author": "Diana Carolina Campuzano Garzón <dcaroli2015@gmail.com>",
   "license": "MIT",

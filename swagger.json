@@ -1,11 +1,13 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a project where I made a simple social network called TeamsWhats. Project and practice of social media server, implementing the learning of backend and nodeJS. [http://localhost:4000/net](http://localhost:4000/net).  For create user, you can use the api key `users` and in the body `name, username, password`.",
+    "description": "TeamsWhats `Red social` es un proyecto en el cual integro diversas tecnologías, Proyecto construido en NodeJS con Express [(framework)](https://expressjs.com/), integra base de datos relacional (PostgreSQL), también registro de personas e inicio de sección con tokens (JsonWebTokens), los usuarios al iniciar sección pueden seguir a otro usuario, publicar posts, dar like a publicaciones e iniciar una conversación con otro usuario. El proyecto tiene base de datos remota y cache (Redis).`Documentación en Swagger`\n\n  Tools:\n  - PostgreSQL\n  - NodeJS\n  - ExpressJS\n  - JavaScript\n  - Arquitectura backend\n  - HTML\n  - Redis\n  - JsonWebTokens (JWT)\n  - Swagger Documentation\n",
     "version": "1.0.0",
     "title": "TeamsWhats",
     "termsOfService": "http://swagger.io/terms/",
     "contact": {
+      "name": "Diana Carolina Campuzano Garzon",
+      "url": "https://github.com/Dianacarolina3",
       "email": "dcaroli2015@gmail.com"
     },
     "license": {
@@ -13,74 +15,242 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:4000",
-  "basePath": "/net",
-  "schemes": ["http"],
+  "host": "https://teamswhats.deelo.cloud",
+  "basePath": "/TeamsWhats",
+  "tags": [
+    {
+      "name": "TeamsWhats",
+      "description": "Acerca de TeamsWhats",
+      "externalDocs": {
+        "description": "Encuentra más",
+        "url": "https://github.com/DianaCarolina3"
+      }
+    }
+  ],
+  "schemes": ["https", "http"],
   "paths": {
     "/users": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Trae todos los usuarios",
+        "description": "Muliple tags can be provided with comma separated strings. Use\\ \\ tag1, tag2, tag3 for testing.",
+        "operationId": "findPetsByTags",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "Tags to filter by",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userPost"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid tag value"
+          }
+        }
+      },
       "post": {
         "tags": ["users"],
-        "summary": "Create user",
-        "description": "This can only create a user.",
-        "operationId": "createUser",
+        "summary": "Crear usuario",
+        "operationId": "addPet",
+        "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
           {
+            "in": "body",
             "name": "body",
-            "username": "body",
-            "password": "body",
+            "description": "Añade el usuario que necesita estar en base de datos",
             "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/userPost"
+            }
           }
         ],
         "responses": {
           "201": {
-            "description": "Ok"
+            "description": "id, name, username"
           }
         }
       },
       "put": {
         "tags": ["users"],
-        "summary": "Updated user",
-        "description": "This can only update a user.",
-        "operationId": "updateUser",
+        "summary": "Actualiza usuario",
+        "operationId": "updatePet",
+        "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
           {
-            "id": "body",
+            "in": "body",
             "name": "body",
-            "username": "body",
-            "password": "body",
-            "bearer token": "auth",
+            "description": "Añade el usuario que necesita estar en base de datos",
             "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/userPut"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
           }
         ],
         "responses": {
+          "201": {
+            "description": "id, name, username"
+          },
           "401": {
-            "description": "Invalid token"
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "No found"
           }
         }
-      },
+      }
+    },
+    "/users/{usersID}": {
       "get": {
         "tags": ["users"],
-        "summary": "Get all users",
-        "description": "Get all the users",
-        "operationId": "getUsers",
-        "produces": ["application/json"],
-        "parameters": [],
+        "summary": "Find pet by ID",
+        "description": "Returns a single pet",
+        "operationId": "getPetById",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "usersID",
+            "in": "path",
+            "description": "ID of pet to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "successful operation",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/userPost"
             }
           },
-          "Ok": {
-            "description": "Ok"
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          }
+        }
+      }
+    },
+    "/pet/findByStatus": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Finds Pets by status",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "findPetsByStatus",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "default": "available",
+              "enum": ["available", "pending", "sold"]
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "security": [
+          {
+            "BasicAut": ["username:password"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userPost"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    },
+    "/pet/findByTags": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Finds Pets by tags",
+        "description": "Muliple tags can be provided with comma separated strings. Use\\ \\ tag1, tag2, tag3 for testing.",
+        "operationId": "findPetsByTags",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "Tags to filter by",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "deprecated": true,
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userPost"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid tag value"
           }
         }
       }
@@ -591,19 +761,8 @@
     }
   },
   "securityDefinitions": {
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "",
-      "flow": "implicit",
-      "scopes": {
-        "write:": "your account",
-        "read:": "read "
-      }
-    },
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
+    "BasicAuth": {
+      "type": "basic"
     }
   },
   "definitions": {
@@ -611,91 +770,98 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
+          "type": "integer",
           "format": "int64"
         },
-        "name": {
-          "type": "string",
-          "format": "int64"
-        },
-        "username": {
-          "type": "string",
-          "format": "int32"
-        },
-        "password": {
-          "type": "string",
-          "default": "string"
-        },
-        "date": {
+        "shipDate": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "Category": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
         },
-        "name": {
-          "type": "string"
+        "status": {
+          "type": "string",
+          "description": "Order Status",
+          "enum": ["placed", "approved", "delivered"]
+        },
+        "complete": {
+          "type": "boolean",
+          "default": false
         }
       },
       "xml": {
-        "name": "Category"
+        "name": "Order"
       }
     },
-    "User": {
+    "userPut": {
       "type": "object",
+      "required": ["id", "name", "password", "username"],
       "properties": {
         "id": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string",
+          "example": "bgrc32q6Aj9BB2VvfR5Xg-t"
+        },
+        "name": {
+          "type": "string",
+          "example": "Diana"
         },
         "username": {
-          "type": "string"
+          "type": "string",
+          "example": "Dianita"
         },
         "password": {
-          "type": "string"
-        },
-        "userStatus": {
-          "type": "integer",
-          "format": "int32",
-          "description": "User Status"
+          "type": "string",
+          "example": "123"
         }
       },
       "xml": {
-        "name": "User"
+        "name": "user"
       }
     },
-    "Tag": {
+    "userPost": {
       "type": "object",
+      "required": ["name", "password", "username"],
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "Diana"
+        },
+        "username": {
+          "type": "string",
+          "example": "Dianita"
+        },
+        "password": {
+          "type": "string",
+          "example": "123"
         }
+      },
+      "xml": {
+        "name": "Pet"
       }
     },
     "ApiResponse": {
       "type": "object",
       "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
+        "status": {
+          "type": "number",
+          "format": "int"
         },
-        "type": {
-          "type": "string"
-        },
-        "message": {
+        "body": {
+          "type": "array"
+        }
+      }
+    }
+  },
+  "responses": {
+    "UnauthorizedError": {
+      "description": "Authentication information is missing or invalid",
+      "headers": {
+        "WWW_Authenticate": {
           "type": "string"
         }
       }
     }
+  },
+  "externalDocs": {
+    "description": "Encuentra más acerca de TeamsWhats",
+    "url": "https://github.com/DianaCarolina3/TeamsWhats"
   }
 }

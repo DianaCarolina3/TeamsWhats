@@ -20,7 +20,7 @@ function handleConnection() {
       console.error('[error connection]', err)
       setTimeout(handleConnection, 1000)
     } else {
-      console.log('[DB connect]')
+      console.log('[DB connect] Connected successfully to postgreSQL')
     }
   })
 

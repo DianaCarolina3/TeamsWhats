@@ -26,6 +26,11 @@ app.use(
 
 router(app)
 
+//Redirect
+app.use((req, res) => {
+  res.redirect(301, '/TeamsWhats')
+})
+
 app.listen(config.api.port, () => {
   console.log(`Server api TeamsWhats listen to port ${config.api.port}`)
 })
