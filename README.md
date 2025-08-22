@@ -1,21 +1,19 @@
-# TeamsWhats (Red Social)
+# TeamsWhats
 
 ## Description
 
-Proyecto de una red social, implementando lo aprendido de Node JS, Express, postgreSQL, JWTs, Redis cache, Swagger y más.
+Proyecto de una red social, implementando lo aprendido de Node JS, Express, postgreSQL, JWTs, Redis cache y documentacion en Swagger.
 Esta construido en NodeJS con Express, posee base de datos relacional (PostgreSQL), tambien registro de personas y inicio de sección con tokens (JsonWebTokens), los usuarios al iniciar sección pueden seguir a otro usuario, publicar posts, dar like a publicaciones e iniciar una conversación con otro usuario.
-El proyecto posee base de datos remota y cache Redis.
+El proyecto posee base de datos remota y cache.
 
 ## Tools
 
-- Javascript
 - Node JS
-- Express JS
+- Express
 - PostgreSQL
-- Redis cache
-- JsonWedTokens
-- Swagger documentation
-- Arquitectura backend
+- Cache Redis
+- JsonWebTokens
+- Documentacion en Swagger
 
 ## Documentation
 
@@ -24,5 +22,3 @@ https://teamswhats.deelo.cloud/TeamsWhats/api-docs
 ### License
 
 Este proyecto TeamsWhats esta bajo la [licencia MIT](https://opensource.org/licenses/MIT)
-
-![](https://webescuela.com/wp-content/uploads/2018/08/que-es-instagram.png.webp)
