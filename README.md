@@ -11,7 +11,7 @@ El proyecto posee base de datos remota y cache.
 - Node JS
 - Express
 - PostgreSQL
-- Cache Redis
+- Cache con Redis
 - JsonWebTokens
 - Documentacion en Swagger
 
