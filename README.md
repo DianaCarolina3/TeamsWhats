@@ -15,6 +15,8 @@ El proyecto posee base de datos remota y cache con Redis.
 - JsonWebTokens
 - Documentacion en Swagger
 
+El proyecto lo realizo basandome en arquitectura de capas (multicapa)
+
 ## Documentation
 
 https://teamswhats.deelo.cloud/TeamsWhats/api-docs
