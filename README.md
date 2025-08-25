@@ -4,7 +4,7 @@
 
 Proyecto de una red social, implementando lo aprendido de Node JS, Express, postgreSQL, JWTs, Redis cache y documentacion en Swagger.
 Esta construido en NodeJS con Express, posee base de datos relacional (PostgreSQL), tambien registro de personas y inicio de sección con tokens (JsonWebTokens), los usuarios al iniciar sección pueden seguir a otro usuario, publicar posts, dar like a publicaciones e iniciar una conversación con otro usuario.
-El proyecto posee base de datos remota y cache.
+El proyecto posee base de datos remota y cache con Redis.
 
 ## Tools
 
