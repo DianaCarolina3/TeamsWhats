@@ -15,7 +15,7 @@ Proyecto de una red social, implementando los conocimientos de Node JS, Express,
 
 El proyecto lo realizo basandome en arquitectura de capas (multicapa)
 
-## Documentation
+### Documentation API
 
 https://teamswhats.deelo.cloud/TeamsWhats/api-docs
 
