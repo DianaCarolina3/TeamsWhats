@@ -1,0 +1,9 @@
+### POST send login and return token of user
+POST http://localhost:4000/teamswhats/auth/login
+Content-Type: application/json
+
+{
+  "username": "tobon123",
+  "password": "1234"
+}
+

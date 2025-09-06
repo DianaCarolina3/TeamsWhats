@@ -1,0 +1,39 @@
+# Mr. Maria
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDlhNGI3LWRkZTUtNDdiOS1iNGM2LTFlOTlmMTliNWJlNSIsInVzZXJuYW1lIjoibWFyaWExMiIsInBhc3N3b3JkIjoiJDJiJDEwJHM3MzdSdG9uQXhjVmRLcEFIMmkuRXV0cy5CbTd3T3Rxb1hKNUpTaEZlM1NHZFlwcjBIVjBlIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDktMDdUMDE6NTg6MzkuODU3WiIsImlhdCI6MTc1NzE5MjU1Nn0.rlIkIRSY_KDAhl1e9DWq_r8A_-q7xlMZlAilNOlhn9w
+@id = bc49a4b7-dde5-47b9-b4c6-1e99f19b5be5
+
+#Mr. Camilo
+@token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmOTFkYmYzLWFiZGEtNGY1YS1hMTM2LWEzNTA3ODc3ZjhkMSIsInVzZXJuYW1lIjoidG9ib24xMjMiLCJwYXNzd29yZCI6IiQyYiQxMCRqNHlPMEZxZS51aGhkMWVUejF2a1N1ZVoxSWJWOEIxOGY5cTliOWdXY2hDRHllNk5ITHVvYSIsImNyZWF0ZWRfYXQiOiIyMDI1LTA5LTA3VDAyOjA0OjUyLjYxNVoiLCJpYXQiOjE3NTcxOTI5MDR9.aB1Su1Bfh28IlV7UZ4YuTFohwu71c7gj0hpyeTq63G0
+@id2 = 3f91dbf3-abda-4f5a-a136-a3507877f8d1
+
+
+### GET all table message
+GET http://localhost:4000/teamswhats/message
+
+### GET a message by id_message
+GET http://localhost:4000/teamswhats/message/c59aa0a0-ec3f-4999-86ab-92c63fd33736
+
+### POST send message with id_chat
+POST http://localhost:4000/teamswhats/message?chat_id=7edee782-c19c-487c-a0e5-186289fe71e2&user_id={{id2}}
+Authorization: Bearer {{token2}}
+Content-Type: application/json
+
+{
+  "message": "Hola, como estas",
+  "file_url": ""
+}
+
+### PUT update message with id_message
+PUT http://localhost:4000/teamswhats/message?message_id=b41d9112-73a8-4fe7-9002-63478b006866&chat_id=f6d5894b-1291-4be3-816b-3c5bd994748d&user_id={{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "message": "Hola, mejor escrito",
+  "file_url": "image.png"
+}
+
+### DELETE a message with id_message
+DELETE http://localhost:4000/teamswhats/message/23cc105a-6ebc-45c4-8655-b7f71eb1d18a
+Authorization: Bearer {{token}}
+

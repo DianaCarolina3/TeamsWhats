@@ -1,0 +1,38 @@
+# Mr. Maria
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDlhNGI3LWRkZTUtNDdiOS1iNGM2LTFlOTlmMTliNWJlNSIsInVzZXJuYW1lIjoibWFyaWExMiIsInBhc3N3b3JkIjoiJDJiJDEwJHM3MzdSdG9uQXhjVmRLcEFIMmkuRXV0cy5CbTd3T3Rxb1hKNUpTaEZlM1NHZFlwcjBIVjBlIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDktMDdUMDE6NTg6MzkuODU3WiIsImlhdCI6MTc1NzE5MjU1Nn0.rlIkIRSY_KDAhl1e9DWq_r8A_-q7xlMZlAilNOlhn9w
+@id = bc49a4b7-dde5-47b9-b4c6-1e99f19b5be5
+
+### GET all users
+GET http://localhost:4000/teamswhats/users
+
+### GET user by id
+GET http://localhost:4000/teamswhats/users/bc49a4b7-dde5-47b9-b4c6-1e99f19b5be5
+
+### POST a new user
+POST http://localhost:4000/teamswhats/users
+Content-Type: application/json
+
+{
+  "name": "Camilo Tobon",
+  "username": "tobon123",
+  "password": "1234"
+}
+
+### UPDATE a user
+PUT http://localhost:4000/teamswhats/users/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Maria Garzon Jimenez",
+  "username": "maria123",
+  "password": "1234"
+}
+
+
+### DELETE a user
+DELETE http://localhost:4000/teamswhats/users/7f5c4ab7-1ae9-415e-ada7-1a802fac7124
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdmNWM0YWI3LTFhZTktNDE1ZS1hZGE3LTFhODAyZmFjNzEyNCIsInVzZXJuYW1lIjoiaGVybmFuZGV6MTIzNDUiLCJwYXNzd29yZCI6IiQyYiQxMCQuNGJPVEZQa3JUYjYyZFV4dFhLOVFlRWlxa3pOOG5GWGxDbDJNSC9BR0h0cTlkNHJjZUZQRyIsImNyZWF0ZWRfYXQiOiIyMDI1LTA5LTAzVDIyOjQxOjQ4LjQyNloiLCJpYXQiOjE3NTY5NDQyMjZ9.GcTfnAk64OeQ1pCEBaJhXG3AnRADWN7ADfkPzvK6nNw
+
+
+

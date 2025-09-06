@@ -1,0 +1,25 @@
+# Mr. Maria
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDlhNGI3LWRkZTUtNDdiOS1iNGM2LTFlOTlmMTliNWJlNSIsInVzZXJuYW1lIjoibWFyaWExMiIsInBhc3N3b3JkIjoiJDJiJDEwJHM3MzdSdG9uQXhjVmRLcEFIMmkuRXV0cy5CbTd3T3Rxb1hKNUpTaEZlM1NHZFlwcjBIVjBlIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDktMDdUMDE6NTg6MzkuODU3WiIsImlhdCI6MTc1NzE5MjU1Nn0.rlIkIRSY_KDAhl1e9DWq_r8A_-q7xlMZlAilNOlhn9w
+@id = bc49a4b7-dde5-47b9-b4c6-1e99f19b5be5
+
+#Mr. Camilo
+@token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmOTFkYmYzLWFiZGEtNGY1YS1hMTM2LWEzNTA3ODc3ZjhkMSIsInVzZXJuYW1lIjoidG9ib24xMjMiLCJwYXNzd29yZCI6IiQyYiQxMCRqNHlPMEZxZS51aGhkMWVUejF2a1N1ZVoxSWJWOEIxOGY5cTliOWdXY2hDRHllNk5ITHVvYSIsImNyZWF0ZWRfYXQiOiIyMDI1LTA5LTA3VDAyOjA0OjUyLjYxNVoiLCJpYXQiOjE3NTcxOTI5MDR9.aB1Su1Bfh28IlV7UZ4YuTFohwu71c7gj0hpyeTq63G0
+@id2 = 3f91dbf3-abda-4f5a-a136-a3507877f8d1
+
+### GET all table chat
+GET http://localhost:4000/teamswhats/chat
+
+### GET all conversations
+GET http://localhost:4000/teamswhats/chat/conversations
+
+### GET a conversations by id_chat
+GET http://localhost:4000/teamswhats/chat/conversations/7edee782-c19c-487c-a0e5-186289fe71e2
+
+### POST init chat conversation with id_other_user
+POST http://localhost:4000/teamswhats/chat/{{id2}}
+Authorization: Bearer {{token}}
+
+### DELETE a chat conversation with id_chat
+DELETE http://localhost:4000/teamswhats/chat/delete/3ffefc39-bb2d-47af-b030-85f70f7c8035
+Authorization: Bearer {{token}}
+
