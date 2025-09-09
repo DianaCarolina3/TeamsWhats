@@ -30,7 +30,7 @@ router(app)
 
 //Redirect
 app.use((req, res) => {
-  res.redirect(301, '/TeamsWhats')
+  res.redirect(301, '/teamswhats')
 })
 
 app.listen(config.api.port, () => {

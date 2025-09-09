@@ -6,8 +6,8 @@
     "title": "TeamsWhats",
     "termsOfService": "http://swagger.io/terms/",
     "contact": {
-      "name": "Diana Carolina Campuzano Garzon",
-      "url": "https://github.com/Dianacarolina3",
+      "name": "Diana Campuzano",
+      "url": "https://github.com/DianaCarolina3",
       "email": "dcaroli2015@gmail.com"
     },
     "license": {
@@ -15,107 +15,69 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "https://teamswhats.deelo.cloud",
-  "basePath": "/TeamsWhats",
+  "host": "teamswhats.onrender.com/teamswhats",
+  "basePath": "/",
   "tags": [
     {
       "name": "TeamsWhats",
       "description": "Acerca de TeamsWhats",
       "externalDocs": {
         "description": "Encuentra más",
-        "url": "https://github.com/DianaCarolina3"
+        "url": "https://github.com/DianaCarolina3/TeamsWhats"
       }
     }
   ],
-  "schemes": ["https", "http"],
+  "schemes": ["https" ,"http"],
   "paths": {
     "/users": {
       "get": {
         "tags": ["users"],
         "summary": "Usuarios",
         "description": "Trae todos los usuarios",
-        "operationId": "findUsersBy",
+        "operationId": "getUsers",
         "produces": ["application/json"],
         "parameters": [],
-        "security": [
-          {
-            "BasicAuth": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "successful operation",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/userPost"
+                "$ref": "#/definitions/users"
               }
             }
           },
           "400": {
-            "description": "Invalid tag value"
+            "description": "Error in request"
           }
         }
       },
       "post": {
         "tags": ["users"],
         "summary": "Crear usuario",
-        "operationId": "addPet",
+        "operationId": "postUser",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "Añade el usuario que necesita estar en base de datos",
+            "description": "Crear el usuario nuevo",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/userPost"
+              "$ref": "#/definitions/users_create"
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "id, name, username"
-          }
-        }
-      },
-      "put": {
-        "tags": ["users"],
-        "summary": "Actualiza usuario",
-        "operationId": "updatePet",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Añade el usuario que necesita estar en base de datos",
-            "required": true,
+            "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/userPut"
-            }
-          }
-        ],
-        "security": [
-          {
-            "BasicAuth": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "id, name, username"
-          },
-          "401": {
-            "description": "Authentication information is missing or invalid",
-            "headers": {
-              "WWW_Authenticate": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/users"
             }
           },
-          "404": {
-            "description": "No found"
+          "400": {
+            "description": "Error in create user"
           }
         }
       }
@@ -123,140 +85,115 @@
     "/users/{id}": {
       "get": {
         "tags": ["users"],
-        "summary": "Find user by id",
-        "description": "Returns a user",
-        "operationId": "getPetById",
-        "produces": ["application/json", "application/xml"],
+        "summary": "Usuarios por id",
+        "description": "Encuentra un usuario por id",
+        "operationId": "getUserById",
+        "produces": ["application/json"],
         "parameters": [
           {
-            "name": "usersID",
+            "name": "id",
             "in": "path",
-            "description": "ID of pet to return",
+            "description": "Id de usuario a retornar",
             "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "security": [
-          {
-            "BasicAuth": []
+            "type": "string",
+            "format": "UUID"
           }
         ],
         "responses": {
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/userPost"
+              "$ref": "#/definitions/users"
             }
           },
           "400": {
-            "description": "Invalid ID supplied"
+            "description": "Invalid id"
           },
-          "404": {
-            "description": "Pet not found"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["users"],
-        "summary": "Delete user",
-        "description": "This can only delete a user.",
-        "operationId": "deleteUser",
-        "produces": ["application/json"],
-        "parameters": ["idUser"],
-        "responses": {
           "404": {
             "description": "User not found"
           }
         }
-      }
-    },
-    "/follow/{id}": {
-      "post": {
-        "tags": ["user_follow"],
-        "summary": "Create a follow",
-        "description": "This can only create a follow.",
-        "operationId": "createFollow",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "id user": "id",
-            "Bearer token": "auth"
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Ok"
-          }
-        }
       },
+        "put": {
+          "tags": ["users"],
+          "summary": "Actualiza usuario",
+          "operationId": "putUser",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "description": "Id del usuario a actualizar",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Información de Usuario a actualizar (opcional: name, username, password)",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/users_create"
+              }
+            }
+          ],
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Usuario actualizado correctamente",
+              "schema": {
+                "$ref": "#/definitions/users"
+              }
+            },
+            "401": {
+              "description": "Token inválido o no enviado",
+              "headers": {
+                "Authorization": {
+                  "description": "Bearer token",
+                  "type": "string"
+                }
+              }
+            },
+            "404": {
+              "description": "Usuario no encontrado"
+            }
+          }
+        },
       "delete": {
-        "tags": ["user_follow"],
-        "summary": "Delete a follow",
-        "description": "This can only delete a follow.",
-        "operationId": "deleteFollow",
+        "tags": ["users"],
+        "summary": "Eliminar usuario",
+        "description": "Eliminar un usuario por id.",
+        "operationId": "deleteUser",
         "produces": ["application/json"],
         "parameters": [
           {
-            "id user": "id",
-            "Bearer token": "auth"
+            "name": "id",
+            "in": "path",
+            "description": "Id de usuario a eliminar",
+            "required": true,
+            "type": "string",
+            "format": "UUID"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Ok"
-          }
-        }
-      }
-    },
-    "/follow/": {
-      "get": {
-        "tags": ["user_follow"],
-        "summary": "Get all follow_user",
-        "description": "Get all follow_user",
-        "operationId": "getFollow",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "Ok"
-          }
-        }
-      }
-    },
-    "/follow/following/{id}": {
-      "get": {
-        "tags": ["user_follow"],
-        "summary": "Get a following",
-        "description": "This can only get following.",
-        "operationId": "getFollow",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "id user": "id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Ok"
-          }
-        }
-      }
-    },
-    "/follow/followers/{id}": {
-      "get": {
-        "tags": ["user_follow"],
-        "summary": "Get a followers",
-        "description": "This can only get followers.",
-        "operationId": "getFollow",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "id user": "id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Ok"
+            "description": "User deleted"
+          },
+          "400": {
+            "description": "Invalid id"
+          },
+          "404": {
+            "description": "User not found"
           }
         }
       }
@@ -265,18 +202,158 @@
       "post": {
         "tags": ["auth"],
         "summary": "login user",
-        "description": "This can only login user.",
+        "description": "Puede logearse un usuario.",
         "operationId": "postAuth",
         "produces": ["application/json"],
         "parameters": [
           {
-            "username": "body",
-            "password": "body"
+            "in": "body",
+            "name": "body",
+            "description": "Logear un usuario",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/auth"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Ok"
+          },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "Authorization": {
+                "description": "Bearer token",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/follow/{id}": {
+      "post": {
+        "tags": ["user_follow"],
+        "summary": "Seguir a un usuario",
+        "description": "Permite seguir a otro usuario por su id.",
+        "operationId": "postFollow",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Id del usuario a seguir",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Follow creado correctamente",
+            "schema": {
+              "$ref": "#/definitions/user_follow"
+            }
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["user_follow"],
+        "summary": "Dejar de seguir a un usuario",
+        "description": "Permite dejar de seguir a otro usuario por su id.",
+        "operationId": "deleteFollow",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Id del usuario a dejar de seguir",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unfollow realizado correctamente"
+          },
+          "401": {
+            "description": "Invalid Token"
+          }
+        }
+      }
+    },
+    "/follow": {
+      "get": {
+        "tags": ["user_follow"],
+        "summary": "Listar tabla follow",
+        "description": "Obtiene toda la tabla de follow_user.",
+        "operationId": "getFollow",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/user_follow"
+            }
+          }
+        }
+      }
+    },
+    "/follow/following/{id}": {
+      "get": {
+        "tags": ["user_follow"],
+        "summary": "Listar usuarios que sigo",
+        "description": "Obtiene todos los usuarios que sigue el usuario dado.",
+        "operationId": "getFollowing",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Id del usuario",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/follow/followers/{id}": {
+      "get": {
+        "tags": ["user_follow"],
+        "summary": "Listar seguidores",
+        "description": "Obtiene todos los seguidores de un usuario dado.",
+        "operationId": "getFollowers",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Id del usuario",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
           }
         }
       }
@@ -649,107 +726,112 @@
     }
   },
   "securityDefinitions": {
-    "BasicAuth": {
-      "type": "basic"
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Ingrese el token con el prefijo 'Bearer {token}'"
     }
   },
   "definitions": {
-    "Order": {
+    "users": {
       "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "shipDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "status": {
-          "type": "string",
-          "description": "Order Status",
-          "enum": ["placed", "approved", "delivered"]
-        },
-        "complete": {
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "xml": {
-        "name": "Order"
-      }
-    },
-    "userPut": {
-      "type": "object",
-      "required": ["id", "name", "password", "username"],
+      "required": ["name", "username", "password"],
       "properties": {
         "id": {
           "type": "string",
-          "example": "bgrc32q6Aj9BB2VvfR5Xg-t"
+          "example": "4dee6a53-53d4-42d2-a535-50bd86372e57"
         },
         "name": {
           "type": "string",
-          "example": "Diana"
+          "example": "Diana Carolina"
         },
         "username": {
           "type": "string",
-          "example": "Dianita"
+          "example": "dianis123"
         },
-        "password": {
+        "created_at": {
           "type": "string",
-          "example": "123"
+          "example": "2025-09-02T23:16:03.291Z"
         }
       },
       "xml": {
-        "name": "user"
+        "name": "users"
       }
     },
-    "userPost": {
+    "users_create": {
       "type": "object",
-      "required": ["name", "password", "username"],
+      "required": ["name", "username", "password"],
       "properties": {
         "name": {
           "type": "string",
-          "example": "Diana"
+          "example": "Juan Camilo"
         },
         "username": {
           "type": "string",
-          "example": "Dianita"
+          "example": "camilo123"
         },
         "password": {
           "type": "string",
-          "example": "123"
+          "example": "1234"
         }
       },
       "xml": {
-        "name": "Pet"
+        "name": "users"
       }
     },
-    "ApiResponse": {
+    "auth": {
+      "type": "object",
+      "required": ["username", "password"],
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "andresito"
+        },
+        "password": {
+          "type": "string",
+          "example": "1234"
+        }
+      },
+      "xml": {
+        "name": "auth"
+      }
+    },
+    "user_follow" : {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "e9fa1f7c-1386-4fc2-b2fe-6d096cfe95c7"
+        },
+        "user_from": {
+          "type": "string",
+          "example": "627f85d0-c39d-463c-9ca9-319c5c116997"
+        },
+        "user_to": {
+          "type": "string",
+          "example": "4dee6a53-53d4-42d2-a535-50bd86372e57"
+        },
+        "created_at": {
+          "type": "string",
+          "example": "2025-09-04T17:51:26.389Z"
+        }
+      },
+      "xml": {
+        "name": "user_follow"
+      }
+    },
+    "api_response": {
       "type": "object",
       "properties": {
         "status": {
-          "type": "number",
-          "format": "int"
+          "type": "number"
         },
         "body": {
           "type": "array"
         }
       }
     }
-  },
-  "responses": {
-    "UnauthorizedError": {
-      "description": "Authentication information is missing or invalid",
-      "headers": {
-        "WWW_Authenticate": {
-          "type": "string"
-        }
-      }
-    }
-  },
-  "externalDocs": {
-    "description": "Encuentra más acerca de TeamsWhats",
-    "url": "https://github.com/DianaCarolina3/TeamsWhats"
   }
 }
