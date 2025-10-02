@@ -34,5 +34,6 @@ app.use((req, res) => {
 })
 
 app.listen(config.api.port, () => {
+  console.log(`Running in ${process.env.NODE_ENV} mode`)
   console.log(`Server api TeamsWhats listen to http://${config.api.host}:${config.api.port}`)
 })

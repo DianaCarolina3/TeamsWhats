@@ -1,4 +1,6 @@
-require('dotenv').config()
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'production' ? '.env.prod': '.env.dev'
+})
 
 module.exports = {
   api: {
