@@ -33,6 +33,7 @@ const codeStatus = {
   415: 'Unsupported Media Type',
   416: 'Requested range not satisfiable',
   417: 'Expectation Failed',
+  498: 'Token Invalid/Expired',
   500: 'Internal Server Error',
   501: 'Not Implemented',
   502: 'Bad Gateway',
@@ -41,7 +42,7 @@ const codeStatus = {
   505: 'HTTP Version not supported',
 }
 
-exports.success = (req, res, message, status) => {
+function success(req, res, message, status) {
   let statusCode = status
   let statusMessage = message
 
@@ -58,7 +59,7 @@ exports.success = (req, res, message, status) => {
   })
 }
 
-exports.error = (req, res, message, status, errorStack) => {
+function error(req, res, message, status, errorStack) {
   let statusCode = status
   let statusMessage = message
 
@@ -69,9 +70,28 @@ exports.error = (req, res, message, status, errorStack) => {
     statusMessage = codeStatus[status]
   }
 
-  res.status(500).json({
-    status: statusCode,
-    message: statusMessage,
-    error: errorStack,
-  })
+  if (statusCode >= 500) {
+    res.status(statusCode).json({
+      status: statusCode,
+      message: statusMessage,
+      error: errorStack,
+    })
+  } else {
+    res.status(statusCode).json({
+      status: statusCode,
+      type: codeStatus[status] || 'Client error',
+      message: statusMessage,
+    })
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
+function errorHandler(err, req, res, next) {
+  error(req, res, err.message, err.statusCode || 500, err.stack)
+}
+
+module.exports = {
+  success,
+  error,
+  errorHandler,
 }

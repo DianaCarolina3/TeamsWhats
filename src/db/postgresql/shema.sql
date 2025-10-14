@@ -7,16 +7,21 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE IF NOT EXISTS users (
                                      id UUID PRIMARY KEY,
-                                     name VARCHAR(100) NOT NULL,
-                                     username VARCHAR(100) NOT NULL UNIQUE,
+                                     name VARCHAR(255) NOT NULL,
+                                     username VARCHAR(100) NOT NULL,
                                      created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS auth (
                                     id UUID PRIMARY KEY,
-                                    username VARCHAR(255) NOT NULL UNIQUE,
+                                    user_id UUID NOT NULL,
+                                    username VARCHAR(100) NOT NULL UNIQUE,
                                     password VARCHAR(255) NOT NULL,
-                                    created_at TIMESTAMP DEFAULT NOW()
+                                    last_login TIMESTAMPTZ,
+                                    created_at TIMESTAMP DEFAULT NOW(),
+
+    -- relacion con tabla de auth
+                                    CONSTRAINT fk_auth_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS user_follow (

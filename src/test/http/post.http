@@ -1,40 +1,38 @@
-# Mr. Maria
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDlhNGI3LWRkZTUtNDdiOS1iNGM2LTFlOTlmMTliNWJlNSIsInVzZXJuYW1lIjoibWFyaWExMiIsInBhc3N3b3JkIjoiJDJiJDEwJHM3MzdSdG9uQXhjVmRLcEFIMmkuRXV0cy5CbTd3T3Rxb1hKNUpTaEZlM1NHZFlwcjBIVjBlIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDktMDdUMDE6NTg6MzkuODU3WiIsImlhdCI6MTc1NzE5MjU1Nn0.rlIkIRSY_KDAhl1e9DWq_r8A_-q7xlMZlAilNOlhn9w
-@id = bc49a4b7-dde5-47b9-b4c6-1e99f19b5be5
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk3ZGZiNGU3LWU3ZTAtNDA0OC1hZTcyLTc5NDAxYzFjMzc0OCIsInVzZXJfaWQiOiJjNjJlY2VmZS01YzkyLTRiMDQtOGQzMy1mYTM4MjI1MjM4MGUiLCJ1c2VybmFtZSI6IjEiLCJwYXNzd29yZCI6IiQyYiQxMCRNUGtVYk9tdVhGNEZrdTRFL2IvLjZ1Z2VJaVFUWkZidGhzN1RVSExaR2F3UElVRTQ5OUYuTyIsImxhc3RfbG9naW4iOm51bGwsImNyZWF0ZWRfYXQiOiIyMDI1LTEwLTA4VDIyOjEwOjA4Ljc5MloiLCJpYXQiOjE3NjAxMTg4MjIsImV4cCI6MTc2MDEyMjQyMn0.M2CBbs-vHuUGWID7FzVeakbaXDiEVAEoPU96lsAWyFg
+@id = c62ecefe-5c92-4b04-8d33-fa382252380e
 
-#Mr. Camilo
-@token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmOTFkYmYzLWFiZGEtNGY1YS1hMTM2LWEzNTA3ODc3ZjhkMSIsInVzZXJuYW1lIjoidG9ib24xMjMiLCJwYXNzd29yZCI6IiQyYiQxMCRqNHlPMEZxZS51aGhkMWVUejF2a1N1ZVoxSWJWOEIxOGY5cTliOWdXY2hDRHllNk5ITHVvYSIsImNyZWF0ZWRfYXQiOiIyMDI1LTA5LTA3VDAyOjA0OjUyLjYxNVoiLCJpYXQiOjE3NTcxOTI5MDR9.aB1Su1Bfh28IlV7UZ4YuTFohwu71c7gj0hpyeTq63G0
-@id2 = 3f91dbf3-abda-4f5a-a136-a3507877f8d1
+@token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5Yzg1Njk4LTNmNGUtNGFhNi1hY2ZkLTkwZDM3ZDUyYmQ3OCIsInVzZXJfaWQiOiJiZmI0OWUzOC0wNjAwLTQ3ZjQtOTRlYy04MzNhYzU0MDgzZjkiLCJ1c2VybmFtZSI6ImNhcm9saW5lMTIzIiwicGFzc3dvcmQiOiIkMmIkMTAkRmlkS0Nicm8xakJicUVsM0xxOWFPLmVSOU5TUm14OThkeVVaamp3TVYzcDJPWFU5TlBCaFMiLCJsYXN0X2xvZ2luIjpudWxsLCJjcmVhdGVkX2F0IjoiMjAyNS0xMC0wOFQxNzoxOTo1OC43NTlaIiwiaWF0IjoxNzU5OTQ1NDA2fQ.Jj8lN-AARmcdGUC6NvUB1VrnrgPxdPKKXwNIfyq6Hco
+@id2 = bfb49e38-0600-47f4-94ec-833ac54083f9
 
 ### GET all post
-GET http://localhost:4000/teamswhats/post
+GET http://localhost:4000/post
 
 ### GET a post by id_post
-GET http://localhost:4000/teamswhats/post/eea9a62b-6394-4852-a205-92ff6e08f376
+GET http://localhost:4000/post/285d0243-8140-4e3c-a57c-bbc641b81dd5
 
 ### POST a new post
-POST http://localhost:4000/teamswhats/post/{{id2}}
-Authorization: Bearer {{token2}}
-Content-Type: application/json
-
-{
-  "text": "Hola, soy camilo y este es mi hermoso post",
-  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMQnpme9hoSqfA4erZAl-576SsyYDi2Fo0mA&s"
-}
-
-### UPDATE a post
-PUT http://localhost:4000/teamswhats/post/{{id}}
+POST http://localhost:4000/post/{{id}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "id": "eea9a62b-6394-4852-a205-92ff6e08f376",
+  "text": "Hola, soy 1 y este es mi hermoso post y nuevo post",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMQnpme9hoSqfA4erZAl-576SsyYDi2Fo0mA&s"
+}
+
+### UPDATE a post
+PUT http://localhost:4000/post/{{id2}}
+Authorization: Bearer {{token2}}
+Content-Type: application/json
+
+{
+  "id": "285d0243-8140-4e3c-a57c-bbc641b81dd5",
   "text": "este es mi post actualizado :)",
   "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMQnpme9hoSqfA4erZAl-576SsyYDi2Fo0mA&s"
 }
 
 
 ### DELETE a post by id_post
-DELETE http://localhost:4000/teamswhats/post/405d9ad5-cf0c-48e9-ab7e-b10f9b474653
-Authorization: Bearer {{token}}
+DELETE http://localhost:4000/post/cf213a4d-91f2-4c2f-aa47-d1b8b9b203c9
+Authorization: Bearer {{token2}}
 

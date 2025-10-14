@@ -1,9 +1,8 @@
 const redis = require('redis')
-const config = require('../config/index.js')
+const config = require('../config')
 
-const client =  redis.createClient({
-  url: `redis://default:${config.cache_redis.password}@${config.cache_redis.host}:${config.cache_redis.port}`
-
+const client = redis.createClient({
+  url: `redis://default:${config.cache_redis.password}@${config.cache_redis.host}:${config.cache_redis.port}`,
 })
 
 async function handleConnectionRedis() {
@@ -21,4 +20,4 @@ async function handleConnectionRedis() {
 
 handleConnectionRedis()
 
-module.exports =  client
+module.exports = client

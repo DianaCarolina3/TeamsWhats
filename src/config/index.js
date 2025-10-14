@@ -1,5 +1,5 @@
 require('dotenv').config({
-  path: process.env.NODE_ENV === 'production' ? '.env.prod': '.env.dev'
+  path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.dev',
 })
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
   postgresql: {
     host: process.env.PG_HOST || 'localhost',
     user: process.env.PG_USER,
-    pass: process.env.PG_PASSWORD,
+    password: process.env.PG_PASSWORD,
     database: process.env.PG_DATABASE,
     port: process.env.PG_PORT,
   },
@@ -23,13 +23,9 @@ module.exports = {
   auth_jwt: {
     secret: process.env.SECRET,
   },
-  remoteDB: process.env.REMOTE_DB || false,
-  mysql: {
-    port: process.env.MYSQL_PORT || 4001,
-    host: process.env.MYSQL_HOST || 'localhost',
+  remoteDB: process.env.REMOTE_DB === 'true' || false,
+  mock_db_service: {
+    host: process.env.MOCK_DB_SERVICE_HOST || 'localhost',
+    port: process.env.MOCK_DB_SERVICE_PORT || 4002,
   },
-  cache: {
-    port: process.env.CACHE_PORT || 4002,
-    host: process.env.CACHE_HOST || 'localhost',
-  }
 }

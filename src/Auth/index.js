@@ -1,17 +1,27 @@
 const jwt = require('jsonwebtoken')
 const error = require('../utils/error')
 const config = require('../config')
+const { store } = require('../config/dependencies')
 
 //genera token al iniciar seccion
 const sign = (dataAuth) => {
   // data contiene id, username y password
   const data = JSON.parse(JSON.stringify(dataAuth))
-  return jwt.sign(data, config.auth_jwt.secret)
+  // aqui se firma marca el tiempo de expiración
+  return jwt.sign(data, config.auth_jwt.secret, { expiresIn: '1h' })
 }
 
 //verifica token
 function verify(token) {
-  return jwt.verify(token, config.auth_jwt.secret, { exp: '1h' })
+  try {
+    return jwt.verify(token, config.auth_jwt.secret)
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      throw error('Token Expired', 498)
+    } else {
+      throw error('Invalid Token', 498)
+    }
+  }
 }
 
 //token
@@ -35,25 +45,30 @@ function getToken(authorization) {
 const check = {
   //for id and token
   //own
-  verifyOwnership: function (req, owner) {
-    const decoded = decodedHeader(req)
-    if (decoded.id !== owner) {
+  verifyOwnership: async function (req, owner) {
+    const decoded = await decodedHeader(req)
+    if (decoded.user_id !== owner) {
       throw error('Invalid token', 401)
     }
     return decoded
   },
   //for only token
   //proper
-  verifyToken: function (req) {
-    decodedHeader(req)
+  verifyToken: async function (req) {
+    await decodedHeader(req)
   },
 }
 
 //decodificacion y comprobacion de la inforamcion extraida del header
-const decodedHeader = (req) => {
+const decodedHeader = async (req) => {
   const authorization = req.headers.authorization || ''
   const token = getToken(authorization)
   const decoded = verify(token)
+  // verificar si user existe o se elimino
+  const user = await store.get('users', decoded.user_id)
+  if (!user) {
+    throw error(`User does not exist or was deleted`, 401)
+  }
   // queda disponible user en la req
   req.user = decoded
   return decoded

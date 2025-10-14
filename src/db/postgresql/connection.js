@@ -6,7 +6,7 @@ const configDB = {
   user: config.postgresql.user,
   host: config.postgresql.host,
   port: config.postgresql.port,
-  password: config.postgresql.pass,
+  password: config.postgresql.password,
   database: config.postgresql.database,
 }
 
@@ -15,12 +15,13 @@ const pool = new Pool(configDB)
 // verifica y desconecta la conexión si no es válida de lo contrario la conneta
 function handleConnection() {
   // inicio connecion
-  pool.connect()
-    .then(client => {
+  pool
+    .connect()
+    .then((client) => {
       console.log('[DB Connected] Successfully connected to PostgreSQL')
       client.release()
     })
-    .catch(err => {
+    .catch((err) => {
       console.error('[Error DB Connection]: ', err.message)
       setTimeout(handleConnection, 2000)
     })

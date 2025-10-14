@@ -1,4 +1,4 @@
-const  client  = require('./connection')
+const client = require('./connection')
 
 async function upsert(table, data) {
   let key = table
@@ -11,12 +11,12 @@ async function upsert(table, data) {
   return true
 }
 
-async function list (table) {
+async function list(table) {
   let result = await client.get(table)
   return JSON.parse(result)
 }
 
-async function get (table, id) {
+async function get(table, id) {
   let key = table
 
   if (id) {
@@ -26,7 +26,6 @@ async function get (table, id) {
   let result = await client.get(key)
   return JSON.parse(result)
 }
-
 
 module.exports = {
   list,

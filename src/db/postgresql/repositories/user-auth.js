@@ -1,10 +1,11 @@
 const pool = require('../connection')
 
-const get = (table, id) => {
+const usernameExists = (table, username) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT * FROM "${table}" WHERE id = $1`,
-      [id],
+      `SELECT username FROM ${table}
+                WHERE username=$1`,
+      [username],
       (err, result) => {
         if (err) return reject(err)
         resolve(result.rows[0])
@@ -13,121 +14,79 @@ const get = (table, id) => {
   })
 }
 
-//add to table
-const insert = (table, data) => {
+const insertInUser = (table, data) => {
   return new Promise((resolve, reject) => {
     let id = data.id
     let name = data.name
     let username = data.username
-    let password = data.password
 
-    if (data.name) {
-      if (data.password) {
-        pool.query(
-          `INSERT INTO "${table}"(
-            id, name, username, password) VALUES ($1, $2, $3, $4)`,
-          [id, name, username, password],
-          (err, result) => {
-            if (err) return reject(err)
-            resolve(result.rows[0])
-          }
-        )
-      } else {
-        pool.query(
-          `INSERT INTO "${table}"(
-            id, name, username) VALUES ($1, $2, $3)`,
-          [id, name, username],
-          (err, result) => {
-            if (err) return reject(err)
-            resolve(result.rows[0])
-          }
-        )
+    pool.query(
+      `INSERT INTO "${table}"(
+            id, name, username) VALUES ($1, $2, $3) 
+              RETURNING *`,
+      [id, name, username],
+      (err, result) => {
+        if (err) return reject(err)
+        resolve(result.rows[0])
       }
-    } else {
-      if (data.password) {
-        pool.query(
-          `INSERT INTO "${table}"(
-            id, username, password) VALUES ($1, $2, $3)`,
-          [id, username, password],
-          (err, result) => {
-            if (err) return reject(err)
-            resolve(result.rows[0])
-          }
-        )
-      } else {
-        pool.query(
-          `INSERT INTO "${table}"(
-            id, username) VALUES ($1, $2)`,
-          [id, username],
-          (err, result) => {
-            if (err) return reject(err)
-            resolve(result.rows[0])
-          }
-        )
-      }
-    }
+    )
   })
 }
 
-// update item from table
-const update = (table, data) => {
+const insertInAuth = (table, data) => {
   return new Promise((resolve, reject) => {
     let id = data.id
-    let name = data.name
+    let user_id = data.user_id
     let username = data.username
     let password = data.password
 
-    if (data.name) {
-      if (data.password) {
-        pool.query(
-          `UPDATE "${table}" SET id=$1, name=$2, username=$3, password=$4 WHERE id=$1`,
-          [id, name, username, password],
-          (err, result) => {
-            if (err) return reject(err)
-            resolve(result)
-          }
-        )
-      } else {
-        pool.query(
-          `UPDATE "${table}" SET id=$1, name=$2, username=$3 WHERE id=$1`,
-          [id, name, username],
-          (err, result) => {
-            if (err) return reject(err)
-            resolve(result)
-          }
-        )
+    pool.query(
+      `INSERT INTO "${table}"(
+            id, user_id, username, password) VALUES ($1, $2, $3, $4)`,
+      [id, user_id, username, password],
+      (err, result) => {
+        if (err) return reject(err)
+        resolve(result)
       }
-    } else {
-      if (data.password) {
-        pool.query(
-          `UPDATE "${table}" SET id=$1, username=$2, password=$3 WHERE id=$1`,
-          [id, username, password],
-          (err, result) => {
-            if (err) return reject(err)
-            resolve(result)
-          }
-        )
-      } else {
-        pool.query(
-          `UPDATE "${table}" SET id=$1, username=$2 WHERE id=$1`,
-          [id, username],
-          (err, result) => {
-            if (err) return reject(err)
-            resolve(result)
-          }
-        )
+    )
+  })
+}
+// Update tables auth and users
+const updateInUser = (table, data, idUser) => {
+  return new Promise((resolve, reject) => {
+    let id = idUser
+    let name = data.name
+    let username = data.username
+
+    pool.query(
+      `UPDATE "${table}" SET 
+            name=COALESCE($1, name), username=COALESCE($2, username) 
+            WHERE id=$3 RETURNING *`,
+      [name, username, id],
+      (err, result) => {
+        if (err) return reject(err)
+        resolve(result.rows[0])
       }
-    }
+    )
   })
 }
 
-const upsert = async (table, data) => {
-  const rowId = await get(table, data.id)
-  if (rowId) {
-    return update(table, data)
-  } else {
-    return insert(table, data)
-  }
+const updateInAuth = (table, data, idUser) => {
+  return new Promise((resolve, reject) => {
+    let user_id = idUser
+    let username = data.username
+    let password = data.password
+
+    pool.query(
+      `UPDATE "${table}" SET
+            username=COALESCE($1, username), password=COALESCE($2, password) WHERE user_id=$3`,
+      [username, password, user_id],
+      (err, result) => {
+        if (err) return reject(err)
+        resolve(result.rows[0])
+      }
+    )
+  })
 }
 
 //remove user in auth table
@@ -158,6 +117,10 @@ const removeOneUser = (id) => {
 }
 
 module.exports = {
-  upsert,
+  usernameExists,
+  insertInUser,
+  insertInAuth,
+  updateInUser,
+  updateInAuth,
   removeOneUser,
 }

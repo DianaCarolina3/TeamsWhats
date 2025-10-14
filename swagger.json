@@ -1,10 +1,10 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "TeamsWhats `Red social` es un proyecto en el cual integro diversas tecnologías. Proyecto construido en NodeJS con Express [(framework)](https://expressjs.com/), integra base de datos relacional (PostgreSQL), también registro de personas e inicio de sección con tokens (JsonWebTokens), los usuarios al iniciar sección pueden seguir a otro usuario, publicar posts, dar like a publicaciones e iniciar una conversación con otro usuario. El proyecto tiene base de datos en PostgreSQL y cache en Redis.`Documentación en Swagger`\n\n  Tools:\n  - PostgreSQL\n  - NodeJS\n  - ExpressJS\n  - JavaScript\n  - HTML\n  - Redis\n  - JsonWebTokens (JWT)\n  - swagger-ui-express\n",
+    "description": "Aplicación de red social con backend, en Node.js, Express.js, PostgreSQL, JWTs, Redis y documentación en Swagger. Esta construido en Node.js con Express, usa base de datos relacional (PostgreSQL). Registro de usuarios e inicio de sección autentificados con tokens (JsonWebToken), los usuarios al registrarse e iniciar sección pueden seguir a otro usuario, publicar posts, dar like a publicaciones e iniciar una conversación con otro usuario. El proyecto posee base de datos relacional en PostgreSQL y cache con Redis para optimizar operaciones frecuentes.\n\n  Tools:\n - JavaScript\n - Node.js\n  - Express.js\n - HTML\n - PostgreSQL\n - Redis\n - JsonWebTokens (JWT)\n - Swagger\n",
     "version": "1.0.0",
     "title": "TeamsWhats",
-    "termsOfService": "http://swagger.io/terms/",
+    "termsOfService": "https://swagger.io/terms/",
     "contact": {
       "name": "Diana Campuzano",
       "url": "https://github.com/DianaCarolina3",
@@ -15,7 +15,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "teamswhats.onrender.com/teamswhats",
+  "host": "localhost:4000",
   "basePath": "/",
   "tags": [
     {
@@ -27,180 +27,156 @@
       }
     }
   ],
-  "schemes": ["https" ,"http"],
+  "schemes": ["https", "http"],
   "paths": {
     "/users": {
       "get": {
-        "tags": ["users"],
-        "summary": "Usuarios",
-        "description": "Trae todos los usuarios",
-        "operationId": "getUsers",
-        "produces": ["application/json"],
-        "parameters": [],
+        "summary": "Obtener todos los usuarios",
+        "tags": ["Users"],
+        "description": "Retorna una lista completa de todos los usuarios registrados en el sistema.",
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "Lista de usuarios obtenida correctamente",
             "schema": {
               "type": "array",
-              "items": {
-                "$ref": "#/definitions/users"
-              }
+              "items": { "$ref": "#/definitions/User" }
             }
           },
-          "400": {
-            "description": "Error in request"
+          "500": {
+            "description": "Error en el servidor"
           }
         }
       },
       "post": {
-        "tags": ["users"],
-        "summary": "Crear usuario",
-        "operationId": "postUser",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "summary": "Crear un nuevo usuario",
+        "tags": ["Users"],
+        "description": "Crea un nuevo usuario junto con su autenticación básica.",
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "Crear el usuario nuevo",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/users_create"
-            }
+            "schema": { "$ref": "#/definitions/UserCreate" },
+            "description": "Datos del nuevo usuario"
           }
         ],
         "responses": {
           "201": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/users"
-            }
+            "description": "Usuario creado exitosamente"
           },
           "400": {
-            "description": "Error in create user"
+            "description": "Datos inválidos o usuario ya existente"
+          },
+          "500": {
+            "description": "Error en el servidor"
           }
         }
       }
     },
     "/users/{id}": {
       "get": {
-        "tags": ["users"],
-        "summary": "Usuarios por id",
-        "description": "Encuentra un usuario por id",
-        "operationId": "getUserById",
-        "produces": ["application/json"],
+        "summary": "Obtener usuario por ID",
+        "tags": ["Users"],
+        "description": "Obtiene la información de un usuario específico según su ID.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Id de usuario a retornar",
             "required": true,
             "type": "string",
-            "format": "UUID"
+            "format": "uuid",
+            "description": "ID del usuario a consultar"
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/users"
-            }
+            "description": "Usuario encontrado correctamente"
           },
           "400": {
-            "description": "Invalid id"
+            "description": "ID de usuario invalido"
           },
           "404": {
-            "description": "User not found"
+            "description": "Usuario no encontrado"
+          },
+          "500": {
+            "description": "Error en el servidor"
           }
         }
       },
-        "put": {
-          "tags": ["users"],
-          "summary": "Actualiza usuario",
-          "operationId": "putUser",
-          "consumes": ["application/json"],
-          "produces": ["application/json"],
-          "parameters": [
-            {
-              "in": "path",
-              "name": "id",
-              "description": "Id del usuario a actualizar",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Información de Usuario a actualizar (opcional: name, username, password)",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/users_create"
-              }
-            }
-          ],
-          "security": [
-            {
-              "BearerAuth": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Usuario actualizado correctamente",
-              "schema": {
-                "$ref": "#/definitions/users"
-              }
-            },
-            "401": {
-              "description": "Token inválido o no enviado",
-              "headers": {
-                "Authorization": {
-                  "description": "Bearer token",
-                  "type": "string"
-                }
-              }
-            },
-            "404": {
-              "description": "Usuario no encontrado"
-            }
-          }
-        },
-      "delete": {
-        "tags": ["users"],
-        "summary": "Eliminar usuario",
-        "description": "Eliminar un usuario por id.",
-        "operationId": "deleteUser",
-        "produces": ["application/json"],
+      "patch": {
+        "summary": "Actualizar usuario",
+        "tags": ["Users"],
+        "description": "Permite modificar los datos de un usuario existente (requiere autenticación).",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Id de usuario a eliminar",
             "required": true,
             "type": "string",
-            "format": "UUID"
-          }
-        ],
-        "security": [
+            "format": "uuid",
+            "description": "ID del usuario a actualizar"
+          },
           {
-            "BearerAuth": []
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/UserUpdate" },
+            "description": "Datos actualizados del usuario"
           }
         ],
+        "security": [{ "BearerAuth": [] }],
         "responses": {
           "200": {
-            "description": "User deleted"
+            "description": "Usuario actualizado correctamente"
           },
           "400": {
-            "description": "Invalid id"
+            "description": "Datos inválidos"
+          },
+          "401": {
+            "description": "Token no autorizado o inválido"
+          },
+          "409": {
+            "description": "Username de usuario existe"
+          },
+          "500": {
+            "description": "Error en el servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar usuario",
+        "tags": ["Users"],
+        "description": "Elimina un usuario del sistema (requiere autenticación).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "ID del usuario a eliminar"
+          }
+        ],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Usuario eliminado correctamente"
+          },
+          "401": {
+            "description": "Token no autorizado o inválido"
           },
           "404": {
-            "description": "User not found"
+            "description": "Usuario no encontrado"
+          },
+          "500": {
+            "description": "Error en el servidor"
           }
         }
       }
     },
     "/auth/login": {
       "post": {
-        "tags": ["auth"],
+        "tags": ["Auth"],
         "summary": "login user",
         "description": "Puede logearse un usuario.",
         "operationId": "postAuth",
@@ -232,494 +208,939 @@
         }
       }
     },
-    "/follow/{id}": {
-      "post": {
-        "tags": ["user_follow"],
-        "summary": "Seguir a un usuario",
-        "description": "Permite seguir a otro usuario por su id.",
-        "operationId": "postFollow",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Id del usuario a seguir",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Follow creado correctamente",
-            "schema": {
-              "$ref": "#/definitions/user_follow"
-            }
-          },
-          "401": {
-            "description": "Invalid token"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["user_follow"],
-        "summary": "Dejar de seguir a un usuario",
-        "description": "Permite dejar de seguir a otro usuario por su id.",
-        "operationId": "deleteFollow",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Id del usuario a dejar de seguir",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
+    "/follow": {
+      "get": {
+        "summary": "Obtener lista completa de relaciones de seguimiento",
+        "tags": ["Follow"],
+        "description": "Retorna todos los registros de seguimiento entre usuarios.",
         "responses": {
           "200": {
-            "description": "Unfollow realizado correctamente"
+            "description": "Lista de relaciones de seguimiento obtenida correctamente"
           },
           "401": {
-            "description": "Invalid Token"
+            "description": "No autorizado (falta o error en el token)"
           }
         }
       }
     },
-    "/follow": {
-      "get": {
-        "tags": ["user_follow"],
-        "summary": "Listar tabla follow",
-        "description": "Obtiene toda la tabla de follow_user.",
-        "operationId": "getFollow",
-        "produces": ["application/json"],
+    "/follow/{id}": {
+      "post": {
+        "summary": "Seguir a otro usuario",
+        "tags": ["Follow"],
+        "description": "Permite a un usuario autenticado seguir a otro usuario existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID del usuario al que se desea seguir",
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "security": [{ "BearerAuth": [] }],
         "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/user_follow"
-            }
+          "201": {
+            "description": "Usuario seguido exitosamente"
+          },
+          "400": {
+            "description": "Usuario no puede seguirse asi mismo"
+          },
+          "401": {
+            "description": "Token inválido o ausente"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
           }
         }
       }
     },
     "/follow/following/{id}": {
       "get": {
-        "tags": ["user_follow"],
-        "summary": "Listar usuarios que sigo",
-        "description": "Obtiene todos los usuarios que sigue el usuario dado.",
-        "operationId": "getFollowing",
-        "produces": ["application/json"],
+        "summary": "Obtener lista de usuarios que sigue un usuario",
+        "tags": ["Follow"],
+        "description": "Retorna todos los usuarios seguidos por el usuario indicado.",
         "parameters": [
           {
-            "in": "path",
             "name": "id",
-            "description": "Id del usuario",
+            "in": "path",
             "required": true,
-            "type": "string"
+            "description": "ID del usuario que está siguiendo a otros",
+            "type": "string",
+            "format": "uuid"
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation"
+            "description": "Lista de usuarios seguidos obtenida correctamente"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
           }
         }
       }
     },
     "/follow/followers/{id}": {
       "get": {
-        "tags": ["user_follow"],
-        "summary": "Listar seguidores",
-        "description": "Obtiene todos los seguidores de un usuario dado.",
-        "operationId": "getFollowers",
-        "produces": ["application/json"],
+        "summary": "Obtener lista de seguidores de un usuario",
+        "tags": ["Follow"],
+        "description": "Retorna todos los usuarios que siguen al usuario indicado.",
         "parameters": [
           {
-            "in": "path",
             "name": "id",
-            "description": "Id del usuario",
+            "in": "path",
             "required": true,
-            "type": "string"
+            "description": "ID del usuario cuyos seguidores se desean listar",
+            "type": "string",
+            "format": "uuid"
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation"
+            "description": "Lista de seguidores obtenida correctamente"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          }
+        }
+      }
+    },
+    "/follow/unfollowed/{id}": {
+      "delete": {
+        "summary": "Dejar de seguir a un usuario",
+        "tags": ["Follow"],
+        "description": "Permite a un usuario autenticado dejar de seguir a otro usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID del usuario al que se dejará de seguir",
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Usuario dejado de seguir correctamente"
+          },
+          "400": {
+            "description": "No se estaba siguiendo al usuario o solicitud inválida"
+          },
+          "401": {
+            "description": "Token inválido o ausente"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
           }
         }
       }
     },
     "/post": {
-      "post": {
-        "tags": ["post"],
-        "summary": "Create post of user",
-        "description": "This can only create post of user.",
-        "operationId": "postPost",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "username": "body",
-            "text": "body",
-            "image": "body",
-            "Bearer token": "auth",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "created"
-          }
-        }
-      },
       "get": {
-        "tags": ["post"],
-        "summary": "Get all post of user",
-        "description": "This can only get all post of user.",
-        "operationId": "getPost",
+        "tags": ["Post"],
+        "summary": "Obtener todas las publicaciones",
+        "description": "Retorna todas las publicaciones disponibles",
+        "operationId": "getAllPosts",
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "Ok"
-          }
-        }
-      },
-      "put": {
-        "tags": ["post"],
-        "summary": "Updated post",
-        "description": "This can only update a post.",
-        "operationId": "putPost",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "id": "body",
-            "username": "body",
-            "text": "body",
-            "image": "body",
-            "bearer token": "auth",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "401": {
-            "description": "Invalid token"
+            "description": "Lista de publicaciones recuperada exitosamente",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Post"
+              }
+            }
           },
-          "404": {
-            "description": "Post not found"
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
     },
-    "/post/{id}": {
+    "/post/{postId}": {
       "get": {
-        "tags": ["post"],
-        "summary": "Get a post of user",
-        "description": "This can only get a post of user.",
-        "operationId": "getPost",
+        "tags": ["Post"],
+        "summary": "Obtener una publicación por ID",
+        "description": "Retorna una publicación específica según su ID",
+        "operationId": "getPostById",
         "produces": ["application/json"],
         "parameters": [
           {
-            "id": "body",
+            "in": "path",
+            "name": "postId",
+            "description": "ID de la publicación a recuperar",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           }
         ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Publicación recuperada exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "404": {
+            "description": "Publicación no encontrada"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       },
       "delete": {
-        "tags": ["post"],
-        "summary": "Delete a post of user",
-        "description": "This can only delete a post of user.",
+        "tags": ["Post"],
+        "summary": "Eliminar una publicación",
+        "description": "Elimina una publicación específica según su ID",
         "operationId": "deletePost",
         "produces": ["application/json"],
         "parameters": [
           {
-            "id": "body",
-            "Bearer token": "auth",
+            "in": "path",
+            "name": "postId",
+            "description": "ID de la publicación a eliminar",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Deleted"
+            "description": "Publicación eliminada exitosamente"
+          },
+          "401": {
+            "description": "Token inválido o no enviado",
+            "headers": {
+              "Authorization": {
+                "description": "Bearer token",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "No autorizado para eliminar esta publicación"
+          },
+          "404": {
+            "description": "Publicación no encontrada"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
     },
-    "/like/{id}": {
-      "get": {
-        "tags": ["post_like"],
-        "summary": "Get a like of post",
-        "description": "This can only get a like of post.",
-        "operationId": "getLike",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "id": "body",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Ok"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["post_like"],
-        "summary": "Delete a like of post",
-        "description": "This can only delete a like of post.",
-        "operationId": "deleteLike",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "id": "body",
-            "Bearer token": "auth",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Ok"
-          }
-        }
-      }
-    },
-    "/like": {
-      "get": {
-        "tags": ["post_like"],
-        "summary": "Get all like of post",
-        "description": "This can only get all like of post.",
-        "operationId": "getLike",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "Ok"
-          }
-        }
-      },
+    "/post/{userId}": {
       "post": {
-        "tags": ["post_like"],
-        "summary": "Delete a like of post",
-        "description": "This can only delete a like of post.",
-        "operationId": "deleteLike",
+        "tags": ["Post"],
+        "summary": "Crear una nueva publicación",
+        "description": "Crea una nueva publicación asociada al usuario especificado",
+        "operationId": "createPost",
+        "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
           {
-            "like_from_post": "body",
-            "like_to_post": "body",
-            "Bearer token": "auth",
+            "in": "path",
+            "name": "userId",
+            "description": "ID del usuario que crea la publicación",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Información de la publicación a crear",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PostInput"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Publicación creada exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos"
+          },
+          "401": {
+            "description": "Token inválido o no enviado",
+            "headers": {
+              "Authorization": {
+                "description": "Bearer token",
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Post"],
+        "summary": "Actualizar una publicación",
+        "description": "Actualiza una publicación existente",
+        "operationId": "updatePost",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "ID del usuario que actualiza la publicación",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Información de la publicación a actualizar",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PostUpdate"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Publicación actualizada exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos"
+          },
+          "401": {
+            "description": "Token inválido o no enviado",
+            "headers": {
+              "Authorization": {
+                "description": "Bearer token",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "No autorizado para actualizar esta publicación"
+          },
+          "404": {
+            "description": "Publicación o usuario no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
     },
-    "/chat/{id}": {
-      "post": {
-        "tags": ["chat"],
-        "summary": "Add a chat for id",
-        "description": "This can only add a chat.",
-        "operationId": "postChat",
+    "/like/": {
+      "get": {
+        "tags": ["Like"],
+        "summary": "Obtener todos los likes",
+        "description": "Retorna todos los likes registrados en el sistema",
+        "operationId": "getAllLikes",
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "id": "body",
-            "Bearer token": "auth",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Lista de todos los likes recuperada exitosamente",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Like"
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       },
-      "delete": {
-        "tags": ["chat"],
-        "summary": "Delete a chat",
-        "description": "This can only delete a chat.",
-        "operationId": "deleteChat",
+      "post": {
+        "tags": ["Like"],
+        "summary": "Dar like a una publicación",
+        "description": "Registra un nuevo like de un usuario a una publicación específica",
+        "operationId": "createLike",
+        "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
           {
-            "id": "body",
-            "Bearer token": "auth",
+            "in": "body",
+            "name": "body",
+            "description": "Información del like a crear",
             "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/LikeInput"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Like registrado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Like"
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos o el usuario ya ha dado like a esta publicación"
+          },
+          "401": {
+            "description": "Token inválido o no enviado",
+            "headers": {
+              "Authorization": {
+                "description": "Bearer token",
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario o publicación no encontrados"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/like/{userId}": {
+      "get": {
+        "tags": ["Like"],
+        "summary": "Obtener likes por usuario",
+        "description": "Retorna todos los likes realizados por un usuario específico",
+        "operationId": "getLikesByUser",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "ID del usuario para ver likes realizados",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
           }
         ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Lista de likes del usuario recuperada exitosamente",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Like"
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/like/{postId}": {
+      "delete": {
+        "tags": ["Like"],
+        "summary": "Eliminar like por ID de publicación",
+        "description": "Elimina el like de un usuario a una publicación específica",
+        "operationId": "deleteLike",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "ID de la publicación cuyo like se quiere eliminar",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like eliminado exitosamente"
+          },
+          "401": {
+            "description": "Token inválido o no enviado",
+            "headers": {
+              "Authorization": {
+                "description": "Bearer token",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "No autorizado para eliminar este like"
+          },
+          "404": {
+            "description": "Like no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
     },
     "/chat": {
       "get": {
-        "tags": ["chat"],
-        "summary": "Get all chat",
-        "description": "This can only get all chat.",
-        "operationId": "getChat",
+        "tags": ["Chat"],
+        "summary": "Obtener todos los chats",
+        "description": "Retorna todos los registros de la tabla chat.",
+        "operationId": "getAllChats",
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Lista de todos los chats recuperada exitosamente.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Chat"
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor."
           }
         }
       }
     },
-    "/chat/conversations": {
+    "/chat/{chatId}": {
       "get": {
-        "tags": ["chat"],
-        "summary": "Get all chat",
-        "description": "This can only get all chat.",
-        "operationId": "getChat",
+        "tags": ["Chat"],
+        "summary": "Obtener un chat por ID",
+        "description": "Retorna un chat específico por su ID.",
+        "operationId": "getChatById",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chatId",
+            "description": "ID del chat a recuperar.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Chat recuperado exitosamente.",
+            "schema": {
+              "$ref": "#/definitions/Chat"
+            }
+          },
+          "404": {
+            "description": "Chat no encontrado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
           }
         }
       }
     },
-    "/chat/conversations/{id}": {
+    "/chat/conversations/{chatId}": {
       "get": {
-        "tags": ["chat"],
-        "summary": "Get a chat for id",
-        "description": "This can only get a chat for id.",
-        "operationId": "getChat",
+        "tags": ["Chat"],
+        "summary": "Obtener conversaciones por ID de chat",
+        "description": "Retorna las conversaciones asociadas a un chat específico.",
+        "operationId": "getConversationByChatId",
         "produces": ["application/json"],
-        "parameters": ["idChat"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chatId",
+            "description": "ID del chat a consultar.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Conversaciones del chat obtenidas correctamente.",
+            "schema": {
+              "$ref": "#/definitions/Conversations"
+            }
+          },
+          "404": {
+            "description": "Chat o conversación no encontrada."
+          },
+          "500": {
+            "description": "Error interno del servidor."
           }
         }
       }
     },
-    "/message/{id}": {
+    "/chat/{idTo}": {
       "post": {
-        "tags": ["message"],
-        "summary": "Add a message",
-        "description": "This can only add a message.",
-        "operationId": "postMessage",
+        "tags": ["Chat"],
+        "summary": "Iniciar una nueva conversación",
+        "description": "Crea un nuevo chat entre el usuario autenticado y otro usuario.",
+        "operationId": "initChat",
         "produces": ["application/json"],
         "parameters": [
           {
-            "username": "body",
-            "message": "body",
-            "file": "body",
-            "id": "body",
-            "Bearer token": "auth",
+            "in": "path",
+            "name": "idTo",
+            "description": "ID del usuario con el que se iniciará la conversación.",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
           }
         ],
         "responses": {
           "201": {
-            "description": "Ok"
+            "description": "Conversación iniciada exitosamente.",
+            "schema": {
+              "$ref": "#/definitions/Chat"
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos."
+          },
+          "401": {
+            "description": "Token inválido o no enviado."
+          },
+          "404": {
+            "description": "Usuario no encontrado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
           }
         }
-      },
-      "put": {
-        "tags": ["message"],
-        "summary": "Update a message",
-        "description": "This can only update a message.",
-        "operationId": "putMessage",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "chat": "body",
-            "username": "body",
-            "message": "body",
-            "file": "body",
-            "id": "body",
-            "Bearer token": "auth",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Ok"
-          }
-        }
-      },
-      "get": {
-        "tags": ["message"],
-        "summary": "Get a message",
-        "description": "This can only get a message.",
-        "operationId": "getMessage",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "id": "body",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Ok"
-          }
-        }
-      },
+      }
+    },
+    "/chat/delete/{idChat}": {
       "delete": {
-        "tags": ["message"],
-        "summary": "Delete a message",
-        "description": "This can only delete a message.",
-        "operationId": "deleteMessage",
+        "tags": ["Chat"],
+        "summary": "Eliminar una conversación de chat",
+        "description": "Elimina una conversación de chat específica del sistema.",
+        "operationId": "deleteChat",
         "produces": ["application/json"],
         "parameters": [
           {
-            "id": "body",
-            "Bearer token": "auth",
+            "in": "path",
+            "name": "idChat",
+            "description": "ID del chat a eliminar.",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Chat eliminado exitosamente.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Deleted chat 835894f9-616d-4f81-b157-b7fb394d9cf7"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token inválido o no enviado."
+          },
+          "403": {
+            "description": "No autorizado para eliminar esta conversación."
+          },
+          "404": {
+            "description": "Chat no encontrado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
           }
         }
       }
     },
     "/message": {
       "get": {
-        "tags": ["message"],
-        "summary": "Get all message",
-        "description": "This can only get all message.",
-        "operationId": "getMessage",
+        "tags": ["Message"],
+        "summary": "Obtener todos los mensajes",
+        "description": "Retorna todos los mensajes registrados en el sistema.",
+        "operationId": "getAllMessages",
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Lista de mensajes recuperada exitosamente",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Message"
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Message"],
+        "summary": "Enviar un nuevo mensaje",
+        "description": "Envía un nuevo mensaje dentro de una conversación específica.",
+        "operationId": "sendMessage",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "chat_id",
+            "description": "ID de la conversación donde se enviará el mensaje.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "query",
+            "name": "user_id",
+            "description": "ID del usuario que envía el mensaje.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Cuerpo del mensaje a enviar.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MessageInput"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Mensaje enviado exitosamente.",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos."
+          },
+          "401": {
+            "description": "Token inválido o no enviado.",
+            "headers": {
+              "Authorization": {
+                "description": "Bearer token",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "No autorizado para enviar mensaje a esta conversación."
+          },
+          "404": {
+            "description": "Conversación o usuario no encontrado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        }
+      },
+      "put": {
+        "tags": ["Message"],
+        "summary": "Actualizar un mensaje existente",
+        "description": "Permite modificar el contenido o archivo adjunto de un mensaje existente.",
+        "operationId": "updateMessage",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "message_id",
+            "description": "ID del mensaje a actualizar.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "query",
+            "name": "chat_id",
+            "description": "ID del chat al que pertenece el mensaje.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "query",
+            "name": "user_id",
+            "description": "ID del usuario que envía la actualización.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Nuevo contenido del mensaje.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MessageInput"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensaje actualizado exitosamente.",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos."
+          },
+          "401": {
+            "description": "Token inválido o no enviado.",
+            "headers": {
+              "Authorization": {
+                "description": "Bearer token",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "No autorizado para actualizar este mensaje."
+          },
+          "404": {
+            "description": "Mensaje, conversación o usuario no encontrado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        }
+      }
+    },
+    "/message/{messageId}": {
+      "get": {
+        "tags": ["Message"],
+        "summary": "Obtener un mensaje por ID",
+        "description": "Retorna los detalles de un mensaje específico según su ID.",
+        "operationId": "getMessageById",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "messageId",
+            "description": "ID del mensaje a recuperar.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensaje recuperado exitosamente.",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "404": {
+            "description": "Mensaje no encontrado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Message"],
+        "summary": "Eliminar un mensaje",
+        "description": "Permite eliminar un mensaje específico por su ID.",
+        "operationId": "deleteMessage",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "messageId",
+            "description": "ID del mensaje a eliminar.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensaje eliminado exitosamente."
+          },
+          "401": {
+            "description": "Token inválido o no enviado.",
+            "headers": {
+              "Authorization": {
+                "description": "Bearer token",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "No autorizado para eliminar este mensaje."
+          },
+          "404": {
+            "description": "Mensaje no encontrado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
           }
         }
       }
@@ -730,54 +1151,76 @@
       "type": "apiKey",
       "name": "Authorization",
       "in": "header",
-      "description": "Ingrese el token con el prefijo 'Bearer {token}'"
+      "description": "Token JWT con formato: Bearer {token}"
     }
   },
   "definitions": {
-    "users": {
+    "User": {
       "type": "object",
-      "required": ["name", "username", "password"],
       "properties": {
         "id": {
           "type": "string",
-          "example": "4dee6a53-53d4-42d2-a535-50bd86372e57"
+          "format": "uuid",
+          "example": "2fdfebfe-f9a7-4b9f-ba4b-b7eadbba3f34",
+          "description": "Identificador único del usuario"
         },
         "name": {
           "type": "string",
-          "example": "Diana Carolina"
+          "example": "Carlos Ochoa",
+          "description": "Nombre completo del usuario"
         },
         "username": {
           "type": "string",
-          "example": "dianis123"
+          "example": "carlito123",
+          "description": "Nombre de usuario único"
         },
         "created_at": {
           "type": "string",
-          "example": "2025-09-02T23:16:03.291Z"
+          "format": "date-time",
+          "example": "2025-10-08T17:45:12.000Z",
+          "description": "Fecha de creación del usuario"
         }
-      },
-      "xml": {
-        "name": "users"
       }
     },
-    "users_create": {
+    "UserCreate": {
       "type": "object",
       "required": ["name", "username", "password"],
       "properties": {
         "name": {
           "type": "string",
-          "example": "Juan Camilo"
+          "example": "Carlos Ochoa",
+          "description": "Nombre completo del usuario"
         },
         "username": {
           "type": "string",
-          "example": "camilo123"
+          "example": "carlito123",
+          "description": "Nombre de usuario único"
         },
         "password": {
           "type": "string",
-          "example": "1234"
+          "example": "1234",
+          "description": "Contraseña del usuario"
         }
-      },
-      "xml": {
-        "name": "users"
+      }
+    },
+    "UserUpdate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Carlos Ochoa Benjamin",
+          "description": "Nuevo nombre del usuario"
+        },
+        "username": {
+          "type": "string",
+          "example": "carlito_123",
+          "description": "Nuevo nombre de usuario (opcional)"
+        },
+        "password": {
+          "type": "string",
+          "example": "abcd1234",
+          "description": "Nueva contraseña (opcional)"
+        }
       }
     },
     "auth": {
@@ -797,40 +1240,265 @@
         "name": "auth"
       }
     },
-    "user_follow" : {
+    "Follow": {
       "type": "object",
-      "required": [],
       "properties": {
         "id": {
           "type": "string",
-          "example": "e9fa1f7c-1386-4fc2-b2fe-6d096cfe95c7"
+          "format": "uuid",
+          "example": "a18e3a8c-4a2f-49a1-b9d9-4a04e7466d29",
+          "description": "Identificador único del registro de seguimiento"
         },
-        "user_from": {
+        "user_id": {
           "type": "string",
-          "example": "627f85d0-c39d-463c-9ca9-319c5c116997"
+          "format": "uuid",
+          "example": "bfb49e38-0600-47f4-94ec-833ac54083f9",
+          "description": "ID del usuario que sigue"
         },
-        "user_to": {
+        "followed_id": {
           "type": "string",
-          "example": "4dee6a53-53d4-42d2-a535-50bd86372e57"
+          "format": "uuid",
+          "example": "2fdfebfe-f9a7-4b9f-ba4b-b7eadbba3f34",
+          "description": "ID del usuario seguido"
         },
         "created_at": {
           "type": "string",
-          "example": "2025-09-04T17:51:26.389Z"
+          "format": "date-time",
+          "example": "2025-10-08T17:45:12.000Z",
+          "description": "Fecha y hora en que se realizó el seguimiento"
         }
       },
-      "xml": {
-        "name": "user_follow"
-      }
+      "required": ["user_id", "followed_id"]
     },
-    "api_response": {
+    "Post": {
       "type": "object",
       "properties": {
-        "status": {
-          "type": "number"
+        "id": {
+          "type": "string",
+          "example": "eea9a62b-6394-4852-a205-92ff6e08f376"
         },
-        "body": {
-          "type": "array"
+        "user_id": {
+          "type": "string",
+          "example": "bfb49e38-0600-47f4-94ec-833ac54083f9"
+        },
+        "text": {
+          "type": "string",
+          "example": "Hola, soy carlitos y este es mi hermoso post"
+        },
+        "image": {
+          "type": "string",
+          "example": "https://example.com/image.jpg"
+        },
+        "created_at": { "type": "string", "example": "2025-10-08T17:30:00Z" }
+      }
+    },
+    "PostInput": {
+      "type": "object",
+      "required": ["text"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "example": "Hola, soy carlitos y este es mi hermoso post"
+        },
+        "image": {
+          "type": "string",
+          "example": "https://example.com/image.jpg"
         }
+      }
+    },
+    "PostUpdate": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "285d0243-8140-4e3c-a57c-bbc641b81dd5"
+        },
+        "text": {
+          "type": "string",
+          "example": "Este es mi post actualizado :)"
+        },
+        "image": {
+          "type": "string",
+          "example": "https://example.com/image.jpg"
+        }
+      }
+    },
+    "Like": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "e412a5d9-14a2-4cf5-8f4f-9a9c9bde6c3e"
+        },
+        "like_from": {
+          "type": "string",
+          "description": "ID del usuario que da el like",
+          "example": "bfb49e38-0600-47f4-94ec-833ac54083f9"
+        },
+        "like_to_post": {
+          "type": "string",
+          "description": "ID del post al que se le dio like",
+          "example": "285d0243-8140-4e3c-a57c-bbc641b81dd5"
+        },
+        "created_at": { "type": "string", "example": "2025-10-08T18:10:00Z" }
+      }
+    },
+    "LikeInput": {
+      "type": "object",
+      "required": ["like_from", "like_to_post"],
+      "properties": {
+        "like_from": {
+          "type": "string",
+          "example": "bfb49e38-0600-47f4-94ec-833ac54083f9"
+        },
+        "like_to_post": {
+          "type": "string",
+          "example": "285d0243-8140-4e3c-a57c-bbc641b81dd5"
+        }
+      }
+    },
+    "Chat": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "ID único de la conversación de chat."
+        },
+        "user_one": {
+          "type": "string",
+          "format": "uuid",
+          "description": "ID del primer usuario en la conversación."
+        },
+        "user_two": {
+          "type": "string",
+          "format": "uuid",
+          "description": "ID del segundo usuario en la conversación."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Fecha y hora de creación del chat."
+        }
+      },
+      "example": {
+        "id": "7edee782-c19c-487c-a0e5-186289fe71e2",
+        "user_one": "2fdfebfe-f9a7-4b9f-ba4b-b7eadbba3f34",
+        "user_two": "bfb49e38-0600-47f4-94ec-833ac54083f9",
+        "createdAt": "2025-10-08T17:30:45.000Z"
+      }
+    },
+    "Conversations": {
+      "type": "object",
+      "properties": {
+        "chat_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "66a0a7b1-13b8-4f19-bb8b-6d4a9ded33cd",
+          "description": "Identificador único del chat."
+        },
+        "users_one": {
+          "type": "string",
+          "format": "uuid",
+          "example": "2fdfebfe-f9a7-4b9f-ba4b-b7eadbba3f34",
+          "description": "ID del primer usuario."
+        },
+        "users_two": {
+          "type": "string",
+          "format": "uuid",
+          "example": "bfb49e38-0600-47f4-94ec-833ac54083f9",
+          "description": "ID del segundo usuario."
+        },
+        "id_message": {
+          "type": "string",
+          "format": "uuid",
+          "example": "7b9b9947-7aac-4ec3-8c97-820295c7af8f",
+          "description": "ID del último mensaje."
+        },
+        "sender_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "bfb49e38-0600-47f4-94ec-833ac54083f9",
+          "description": "ID del usuario que envió el último mensaje."
+        },
+        "sender_name": {
+          "type": "string",
+          "example": "caroline123",
+          "description": "Nombre del remitente del último mensaje."
+        },
+        "message": {
+          "type": "string",
+          "example": "Hola, como estas",
+          "description": "Contenido del último mensaje."
+        },
+        "file_url": {
+          "type": "string",
+          "example": "",
+          "description": "URL del archivo adjunto, si existe."
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "id_message": {
+          "type": "string",
+          "format": "uuid",
+          "example": "c59aa0a0-ec3f-4999-86ab-92c63fd33736",
+          "description": "Identificador único del mensaje."
+        },
+        "chat_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "66a0a7b1-13b8-4f19-bb8b-6d4a9ded33cd",
+          "description": "Identificador del chat al que pertenece el mensaje."
+        },
+        "user_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "bfb49e38-0600-47f4-94ec-833ac54083f9",
+          "description": "Identificador del usuario que envió el mensaje."
+        },
+        "sender_name": {
+          "type": "string",
+          "example": "caroline123",
+          "description": "Nombre del remitente del mensaje."
+        },
+        "message": {
+          "type": "string",
+          "example": "Hola, ¿cómo estás?",
+          "description": "Contenido textual del mensaje."
+        },
+        "file_url": {
+          "type": "string",
+          "example": "https://example.com/image.png",
+          "description": "URL del archivo adjunto, si aplica."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2025-10-08T17:30:00.000Z",
+          "description": "Fecha y hora de creación del mensaje."
+        }
+      }
+    },
+    "MessageInput": {
+      "type": "object",
+      "required": ["message"],
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Texto del mensaje a enviar."
+        },
+        "file_url": {
+          "type": "string",
+          "description": "URL de archivo adjunto (opcional)."
+        }
+      },
+      "example": {
+        "message": "Hola, Muy bien",
+        "file_url": ""
       }
     }
   }

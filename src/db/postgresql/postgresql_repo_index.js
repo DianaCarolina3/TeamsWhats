@@ -9,8 +9,24 @@ const chat = require('./repositories/chat_sql')
 const message = require('./repositories/message_sql')
 
 //USER AND AUTH
-async function upsert(table, data) {
-  return await user_auth.upsert(table, data)
+async function usernameExists(table, data) {
+  return await user_auth.usernameExists(table, data)
+}
+
+async function insertInUser(table, data) {
+  return await user_auth.insertInUser(table, data)
+}
+
+async function insertInAuth(table, data) {
+  return await user_auth.insertInAuth(table, data)
+}
+
+async function updateInUser(table, data, idUser) {
+  return await user_auth.updateInUser(table, data, idUser)
+}
+
+async function updateInAuth(table, data, idUser) {
+  return await user_auth.updateInAuth(table, data, idUser)
 }
 
 async function removeOneUser(id) {
@@ -61,12 +77,8 @@ async function addChat(table, data) {
   return await chat.addChat(table, data)
 }
 
-async function conversations() {
-  return await chat.conversations()
-}
-
-async function oneConversations(table, id) {
-  return await chat.oneConversations(table, id)
+async function oneChat(table, id) {
+  return await chat.oneChat(table, id)
 }
 
 //MESSAGE
@@ -123,13 +135,22 @@ const remove = (table, id) => {
   })
 }
 
+const userIdExists = (table, userId) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`SELECT id FROM users WHERE id=$1`, [userId], (err, result) => {
+      if (err) return reject(err)
+      resolve(result.rows[0])
+    })
+  })
+}
+
 // //login and autentification
 const query = (table, query) => {
   return new Promise((resolve, reject) => {
     let username = query.username
 
     pool.query(
-      `SELECT * FROM "${table}" WHERE username=$1 `,
+      `SELECT * FROM "${table}" WHERE username=$1`,
       [username],
       (err, result) => {
         if (err) return reject(err)
@@ -145,8 +166,13 @@ module.exports = {
   get,
   remove,
   query,
-  upsert,
+  userIdExists,
+  usernameExists,
   removeOneUser,
+  insertInUser,
+  insertInAuth,
+  updateInUser,
+  updateInAuth,
   //follow
   getFollowing,
   getFollowers,
@@ -159,8 +185,7 @@ module.exports = {
   removePost,
   //chat
   addChat,
-  conversations,
-  oneConversations,
+  oneChat,
   //message
   addMessage,
   updateMessage,

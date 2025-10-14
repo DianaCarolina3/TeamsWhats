@@ -1,0 +1,22 @@
+{
+  "name": "mock-db-service",
+  "version": "1.0.0",
+  "description": "Simulation microservice of remote db",
+  "keywords": [
+    "javascript",
+    "node",
+    "express"
+  ],
+  "license": "MIT",
+  "author": "Diana Campuzano",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "dotenv": "17.2.3",
+    "express": "5.1.0"
+  }
+}

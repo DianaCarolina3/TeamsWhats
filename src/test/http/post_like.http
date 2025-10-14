@@ -1,27 +1,25 @@
-# Mr. Maria
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDlhNGI3LWRkZTUtNDdiOS1iNGM2LTFlOTlmMTliNWJlNSIsInVzZXJuYW1lIjoibWFyaWExMiIsInBhc3N3b3JkIjoiJDJiJDEwJHM3MzdSdG9uQXhjVmRLcEFIMmkuRXV0cy5CbTd3T3Rxb1hKNUpTaEZlM1NHZFlwcjBIVjBlIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDktMDdUMDE6NTg6MzkuODU3WiIsImlhdCI6MTc1NzE5MjU1Nn0.rlIkIRSY_KDAhl1e9DWq_r8A_-q7xlMZlAilNOlhn9w
-@id = bc49a4b7-dde5-47b9-b4c6-1e99f19b5be5
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1N2U3NmRiLTViMTktNDVhNi1hZDJjLTg5NDkzZjk0YzAxNiIsInVzZXJfaWQiOiIyZmRmZWJmZS1mOWE3LTRiOWYtYmE0Yi1iN2VhZGJiYTNmMzQiLCJ1c2VybmFtZSI6ImNhcmxpdG8xMjMiLCJwYXNzd29yZCI6IiQyYiQxMCRFVmJYNzlkT0VuZ2RoTmFlM05uSU9PNVVFc0lMVmdZQ2c5TEJPLm5DVnFmaVFINm9SbTF3cSIsImxhc3RfbG9naW4iOm51bGwsImNyZWF0ZWRfYXQiOiIyMDI1LTEwLTA4VDE3OjMxOjAzLjQ0NFoiLCJpYXQiOjE3NTk5NDQ3NjN9.VScmvc7RXflLAq1APqqYNnoAeJwlJnk0GXSABuQKL8E
+@id = 2fdfebfe-f9a7-4b9f-ba4b-b7eadbba3f34
 
-#Mr. Camilo
-@token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmOTFkYmYzLWFiZGEtNGY1YS1hMTM2LWEzNTA3ODc3ZjhkMSIsInVzZXJuYW1lIjoidG9ib24xMjMiLCJwYXNzd29yZCI6IiQyYiQxMCRqNHlPMEZxZS51aGhkMWVUejF2a1N1ZVoxSWJWOEIxOGY5cTliOWdXY2hDRHllNk5ITHVvYSIsImNyZWF0ZWRfYXQiOiIyMDI1LTA5LTA3VDAyOjA0OjUyLjYxNVoiLCJpYXQiOjE3NTcxOTI5MDR9.aB1Su1Bfh28IlV7UZ4YuTFohwu71c7gj0hpyeTq63G0
-@id2 = 3f91dbf3-abda-4f5a-a136-a3507877f8d1
+@token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5Yzg1Njk4LTNmNGUtNGFhNi1hY2ZkLTkwZDM3ZDUyYmQ3OCIsInVzZXJfaWQiOiJiZmI0OWUzOC0wNjAwLTQ3ZjQtOTRlYy04MzNhYzU0MDgzZjkiLCJ1c2VybmFtZSI6ImNhcm9saW5lMTIzIiwicGFzc3dvcmQiOiIkMmIkMTAkRmlkS0Nicm8xakJicUVsM0xxOWFPLmVSOU5TUm14OThkeVVaamp3TVYzcDJPWFU5TlBCaFMiLCJsYXN0X2xvZ2luIjpudWxsLCJjcmVhdGVkX2F0IjoiMjAyNS0xMC0wOFQxNzoxOTo1OC43NTlaIiwiaWF0IjoxNzU5OTQ1NDA2fQ.Jj8lN-AARmcdGUC6NvUB1VrnrgPxdPKKXwNIfyq6Hco
+@id2 = bfb49e38-0600-47f4-94ec-833ac54083f9
 
 ### POST like to a post
-POST http://localhost:4000/teamswhats/like/
+POST http://localhost:4000/like/
 Authorization: Bearer {{token2}}
 Content-Type: application/json
 
 {
-  "like_from": "3f91dbf3-abda-4f5a-a136-a3507877f8d1",
-  "like_to_post": "eea9a62b-6394-4852-a205-92ff6e08f376"
+  "like_from": "bfb49e38-0600-47f4-94ec-833ac54083f9",
+  "like_to_post": "2cd89be1-0bbf-4d02-b921-55eaec2e5ca4"
 }
 
 ### GET table like
-GET http://localhost:4000/teamswhats/like/
+GET http://localhost:4000/like/
 
 ### GET like by user_id
-GET http://localhost:4000/teamswhats/like/{{id}}
+GET http://localhost:4000/like/{{id}}
 
 ### DELETE like by post_id
-DELETE http://localhost:4000/teamswhats/like/c4f619ac-573e-4aa0-bc80-e7bd01a72106
+DELETE http://localhost:4000/like/2cd89be1-0bbf-4d02-b921-55eaec2e5ca4
 Authorization: Bearer {{token}}
