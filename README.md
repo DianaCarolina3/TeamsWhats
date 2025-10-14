@@ -4,6 +4,9 @@ Aplicación de red social con backend robusto que permite funciones como registr
 
 Para la construcion del proyecto me baso en la arquitectura multicapa para mantener modularidad, escalabilidad y claridad en la organización del código.
 
+<img src="https://raw.githubusercontent.com/DianaCarolina3/TeamsWhats/master/src/public/images/teamswhats-api-docs.png" width="400" />
+<img src="https://raw.githubusercontent.com/DianaCarolina3/TeamsWhats/master/src/public/images/teamswhast-schema-db.png" width="400" />
+
 ## Caracteristicas
 
 - Registro y autenticación segura de usuarios con JWT
