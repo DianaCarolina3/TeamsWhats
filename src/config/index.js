@@ -13,6 +13,7 @@ module.exports = {
     password: process.env.PG_PASSWORD,
     database: process.env.PG_DATABASE,
     port: process.env.PG_PORT,
+    schema: process.env.PG_SCHEMA,
   },
   cache_redis: {
     user: process.env.REDIS_USER,

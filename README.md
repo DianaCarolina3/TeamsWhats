@@ -84,6 +84,7 @@ PG_HOST=your_pg_host
 PG_PASSWORD=your_pg_password
 PG_DATABASE=your_pg_database
 PG_PORT=your_pg_port
+PG_SCHEMA=public_or_your_pg_schema
 
 ## CACHE_REDIS
 REDIS_HOST=your_redis_host

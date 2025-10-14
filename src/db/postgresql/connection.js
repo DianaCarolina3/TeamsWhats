@@ -12,6 +12,9 @@ const configDB = {
 
 const pool = new Pool(configDB)
 
+// cambio de squema de la db
+pool.query(`SET search_path TO ${config.postgresql.schema};`)
+
 // verifica y desconecta la conexión si no es válida de lo contrario la conneta
 function handleConnection() {
   // inicio connecion
