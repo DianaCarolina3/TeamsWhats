@@ -101,8 +101,8 @@ SECRET=your_secret
 REMOTE_DB=false
 
 ## MOCK_DB_SERVICE
-MOCK_DB_SERVICE_HOST=your_mysql_service_host
-MOCK_DB_SERVICE_PORT=your_mysql_service_port
+MOCK_DB_SERVICE_HOST=your_db_service_host
+MOCK_DB_SERVICE_PORT=your_db_service_port
 ```
 
 4. Levantar el servidor
