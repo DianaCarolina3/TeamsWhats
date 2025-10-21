@@ -2,7 +2,7 @@
 
 Aplicación de red social con backend robusto que permite funciones como registro, autenticación, publicación de posts, seguimiento de usuarios, mensajes, likes y manejo de conversaciones.
 
-Para la construcion del proyecto me baso en la arquitectura multicapa para mantener modularidad, escalabilidad y claridad en la organización del código.
+Para la construcion del proyecto me baso en la arquitectura en capas para mantener modularidad, escalabilidad y claridad en la organización del código.
 
 ## Caracteristicas
 
