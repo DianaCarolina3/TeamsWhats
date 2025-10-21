@@ -4,8 +4,10 @@ Aplicación de red social con backend robusto que permite funciones como registr
 
 Para la construcion del proyecto me baso en la arquitectura multicapa para mantener modularidad, escalabilidad y claridad en la organización del código.
 
+<br/><br/>
 <img src="https://raw.githubusercontent.com/DianaCarolina3/TeamsWhats/master/src/public/images/teamswhats-api-docs.png" width="500" />
 <img src="https://raw.githubusercontent.com/DianaCarolina3/TeamsWhats/master/src/public/images/teamswhast-schema-db.png" width="500" />
+
 
 ## Caracteristicas
 
@@ -116,6 +118,7 @@ yarn start
 5. Acceder a la documentación de la API
 
 Visita la ruta de Swagger ( `/api-docs`) para ver los endpoints disponibles y su uso.
+
 
 ### Estructura del proyecto
 
